@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+
+	<context id="OracleTables" targetRuntime="MyBatis3">
+
+
+		<!-- toString插件 -->
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+		<!-- mapper插件 -->
+		<plugin type="org.mybatis.generator.plugins.MapperConfigPlugin">
+			<property name="fileName" value="GeneratedMapperConfig.xml" />
+			<property name="targetPackage" value="com.sun.entity" />
+			<property name="targetProject" value="./src/main/java" />
+		</plugin>
+
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<!-- sqlserver 地址 -->
+		<jdbcConnection
+			driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			connectionURL="jdbc:sqlserver://47.96.101.114:1433;databasename=测试数据"
+			userId="sa" password="Wx123456">
+		</jdbcConnection>
+
+
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- java model类生成路径 -->
+		<javaModelGenerator
+			targetPackage="com.yugyg.shorturlserver.entity.automodel"
+			targetProject="./src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<!-- java sqlmap xml映射文件地址 -->
+		<sqlMapGenerator targetPackage="autosqlmap"
+			targetProject="./src/main/resources">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</sqlMapGenerator>
+
+		<!-- java dao interface接口 -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.yugyg.shorturlserver.entity.autodao"
+			targetProject="./src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaClientGenerator>
+
+
+
+		<table tableName="fs_dwzb" domainObjectName="Fs_dwzb">
+			<columnOverride column="dwdm" jdbcType="VARCHAR"
+				javaType="String" />  <!-- 单位代码 -->
+			<columnOverride column="dwmc" jdbcType="VARCHAR"
+				javaType="String" />  <!-- -->
+			<columnOverride column="addr" jdbcType="VARCHAR"
+				javaType="String" />  <!-- -->
+			<columnOverride column="fzr" jdbcType="VARCHAR"
+				javaType="String" />   <!-- -->
+			<columnOverride column="ssxt" jdbcType="VARCHAR"
+				javaType="String" />  <!-- -->
+			<columnOverride column="zgbm" jdbcType="VARCHAR"
+				javaType="String" />  <!-- 字归编码 -->
+			<columnOverride column="dwxz" jdbcType="VARCHAR"
+				javaType="String" />  <!-- -->
+			<columnOverride column="yzbm" jdbcType="VARCHAR"
+				javaType="String" /> <!-- -->
+			<columnOverride column="pgy" jdbcType="VARCHAR"
+				javaType="String" />  <!-- -->
+			<columnOverride column="pgysfz" jdbcType="VARCHAR"
+				javaType="String" /> <!-- -->
+			<columnOverride column="tel" jdbcType="VARCHAR"
+				javaType="String" /> <!-- -->
+
+			<columnOverride column="bzrs" jdbcType="INTEGER"
+				javaType="int" /> <!-- -->
+			<columnOverride column="zzrs" jdbcType="INTEGER"
+				javaType="int" />
+			<columnOverride column="ltxrs" jdbcType="INTEGER"
+				javaType="int" />
+			<columnOverride column="lsrs" jdbcType="INTEGER"
+				javaType="int" />
+
+			<columnOverride column="dwjb" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="kpfs" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="dwtp" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="cwzg" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="dyzth" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="khh" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="srhzh" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="zchzh" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="zgzbh" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="sfxkzh" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="def_str1" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="def_str2" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="def_str3" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="def_str4" jdbcType="VARCHAR"
+				javaType="String" />
+			<columnOverride column="def_str5" jdbcType="VARCHAR"
+				javaType="String" />
+
+			<columnOverride column="def_int1" jdbcType="INTEGER"
+				javaType="int" />
+			<columnOverride column="def_int2" jdbcType="INTEGER"
+				javaType="int" />
+			<columnOverride column="def_int3" jdbcType="INTEGER"
+				javaType="int" />
+			<columnOverride column="def_int4" jdbcType="INTEGER"
+				javaType="int" />
+			<columnOverride column="def_int5" jdbcType="INTEGER"
+				javaType="int" />      <!-- 收款银行账户名称 -->
+
+
+			<columnOverride column="def_num1" jdbcType="DECIMAL"
+				javaType="java.math.BigDecimal" />	 <!-- 收费标准上限 money类型 -->
+			<columnOverride column="def_num2" jdbcType="DECIMAL"
+				javaType="java.math.BigDecimal" />	 <!-- 收费标准 money类型 -->
+			<columnOverride column="def_dt1" jdbcType="TIMESTAMP"
+				javaType="java.util.Date" />
+			<columnOverride column="def_dt2" jdbcType="TIMESTAMP"
+				javaType="java.util.Date" />
+		</table>
+
+	</context>
+</generatorConfiguration>
