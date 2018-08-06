@@ -30,12 +30,13 @@
 			<artifactId>mybatis-generator-maven-plugin</artifactId>
 			<version>1.3.5</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper mybatis 分页插件-->
+		<!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper mybatis 
 		<dependency>
 		    <groupId>com.github.pagehelper</groupId>
 		    <artifactId>pagehelper</artifactId>
 		    <version>5.1.4</version>
 		</dependency>
+		分页插件-->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>

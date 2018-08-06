@@ -107,11 +107,17 @@ public class DataController {
 				json.put("resolution", resolution);
 				break;
 			case "H"://访问记录明细
+				Integer count = shortUrlService.selectAllRecordCount(searchData);
 				if (!Util.isEmpty(page)) {
-					searchData.setStartIndex(Integer.parseInt(page)*50);
+					if (Integer.valueOf(page)<=0) {
+						searchData.setStartIndex(0);
+					}else if(Integer.valueOf(page)>count){
+						searchData.setStartIndex((count-1)*50);
+					}else {
+						searchData.setStartIndex((Integer.parseInt(page)-1)*50);
+					}
 				}
 				List<YgfDljSearchRecord> allRecord = shortUrlService.selectAllRecord(searchData);
-				Integer count = shortUrlService.selectAllRecordCount(searchData);
 				json.put("allRecord", allRecord);
 				json.put("totalPage", count%50==0?count/50:(count/50)+1);
 				break;
