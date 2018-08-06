@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sun.exmapper.YgfDljExMapper">
+  	<select id="selectShortLink" parameterType="java.lang.String" resultType="com.sun.entity.YgfLongShortLink">
+  		SELECT * FROM ygf_long_short_link lsl WHERE lsl.shortLink = #{shortLink}
+  	</select>
+  	<select id="selectByShortLink" parameterType="java.lang.String" resultType="com.sun.entity.YgfLongShortLink">
+  		SELECT * FROM ygf_long_short_link lsl WHERE lsl.shortLink LIKE #{shortLink} ORDER BY lsl.time DESC
+  	</select>
+  	<select id="selectByLongLink" parameterType="java.lang.String" resultType="com.sun.entity.YgfLongShortLink">
+  		SELECT * FROM ygf_long_short_link lsl WHERE lsl.longLink = #{longLink} 
+  	</select>
+  	<select id="selectSevenDaysData" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.SevenDaysData">
+		SELECT GROUP_CONCAT(a.total)total,GROUP_CONCAT(a.uv)uv,GROUP_CONCAT(a.ipnum)ipnum,GROUP_CONCAT(a.oklink)oklink,GROUP_CONCAT(a.errorlink)errorlink,
+		GROUP_CONCAT(a.time)xData FROM 
+		(
+		SELECT COUNT(sr.id)total,COUNT(DISTINCT sr.cookie)uv,count(DISTINCT sr.ip)ipnum,SUM(if(IFNULL(sr.status,0)=0 AND IFNULL(sr.id,0) != 0,1,0))oklink,
+		SUM(if(IFNULL(sr.status,0)=1 AND IFNULL(sr.id,0) != 0,1,0)) errorlink,cale.time FROM
+		(
+		SELECT DATE(cal.date)time FROM ygf_calendar cal WHERE DATE(cal.date) >= DATE(date_sub(now(), interval 8 DAY)) AND  cal.date &lt;= NOW()
+		) cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE searchShort = #{shortUrl}) sr ON cale.time = DATE(sr.time) 
+		GROUP BY cale.time
+		)a;
+  	</select>
+  	<select id="selectTwentyHours" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.SevenDaysData">
+		SELECT GROUP_CONCAT(a.total)total,GROUP_CONCAT(a.uv)uv,GROUP_CONCAT(a.ipnum)ipnum,GROUP_CONCAT(a.oklink)oklink,GROUP_CONCAT(a.errorlink)errorlink,GROUP_CONCAT(a.hours)xData FROM 
+		(
+		SELECT COUNT(sr.id)total,COUNT(DISTINCT sr.cookie)uv,count(DISTINCT sr.ip)ipnum,SUM(if(IFNULL(sr.status,0)=0 AND IFNULL(sr.id,0) != 0,1,0))oklink,
+		SUM(if(IFNULL(sr.status,0)=1 AND IFNULL(sr.id,0) != 0,1,0)) errorlink,cale.hours FROM
+		(
+		SELECT h.hours FROM ygf_hours h
+		) 
+		cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE recod.searchShort = #{shortUrl} AND 
+		DATE(recod.time) = CAST(#{begin} AS DATE) 
+		) sr ON cale.hours = HOUR(sr.time) 
+		GROUP BY cale.hours
+		)a;
+  	</select>
+  	<select id="selectEquitMent" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+  		SELECT COUNT(rec.equipment)value,rec.equipment name FROM ygf_dlj_search_record rec 
+  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
+  		GROUP BY rec.equipment
+  	</select>
+  	<select id="selectBrowser" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
+  		SELECT GROUP_CONCAT(a.value)series ,GROUP_CONCAT(a.name)xAxis FROM (
+  		SELECT COUNT(rec.browser)value,rec.browser name FROM ygf_dlj_search_record rec 
+  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
+  		GROUP BY rec.browser)a
+  	</select>
+  	<select id="selectInternet" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
+  		SELECT GROUP_CONCAT(a.value)series ,GROUP_CONCAT(a.name)xAxis FROM (
+  		SELECT COUNT(split_str(rec.ipBelong,'-',4))value,split_str(rec.ipBelong,'-',4) name FROM ygf_dlj_search_record rec 
+  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
+  		GROUP BY split_str(rec.ipBelong,'-',4))a
+  	</select>
+  	<select id="selectInternet" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+  		SELECT COUNT(rec.resolution)value,rec.resolution name FROM ygf_dlj_search_record rec 
+  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
+  		GROUP BY rec.resolution
+  	</select>
+  	<select id="selectAllRecord" parameterType="com.sun.service.data.SearchData" resultType="com.sun.entity.YgfDljSearchRecord">
+  		SELECT * FROM ygf_dlj_search_record recod WHERE
+  		DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND recod.searchShort = #{shortUrl}
+  		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
+  		ORDER BY rec.time DESC
+  	</select>
+  	
+  	<select id="selectIps" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.IPData">
+  		SELECT COUNT(rec.ip)count,rec.ipBelong,rec.ip FROM ygf_dlj_search_record rec WHERE 
+  		DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND recod.searchShort = #{shortUrl} 
+  		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
+  		GROUP BY rec.ip
+  	</select>
+  	<select id="topThree" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.TopThree">
+  		SELECT COUNT(1)total,COUNT(DISTINCT rec.ip)ip,COUNT(DISTINCT rec.cookie)uv FROM ygf_dlj_search_record rec WHERE rec.searchShort = #{shortUrl}
+  	</select>
+  	
+</mapper>

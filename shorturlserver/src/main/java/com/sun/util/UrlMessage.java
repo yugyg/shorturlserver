@@ -1,4 +1,4 @@
-package com.yugyg.shorturlserver;
+package com.sun.util;
 
 public class UrlMessage {
 

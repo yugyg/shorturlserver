@@ -1,4 +1,4 @@
-package com.yugyg.shorturlserver;
+package com.sun.util;
 
 import java.nio.charset.Charset;
 
@@ -7,10 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -27,7 +25,7 @@ public class HttpUtil {
 	private static final HttpUtil instance = new HttpUtil();
 
 	private HttpUtil() {
-
+		
 	}
 
 	public static HttpUtil getInstance() {
