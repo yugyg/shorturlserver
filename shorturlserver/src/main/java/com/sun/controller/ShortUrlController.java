@@ -79,7 +79,7 @@ public class ShortUrlController {
 					cookieString = c;
 				}
 				shortUrlService.insertRecord(remoteAddr,userAgent,shortUrl,null,cookieString,referer);
-				httpResponse.sendRedirect(url);
+				httpResponse.sendRedirect(Util.isEmpty(userAgent)?Const.ygfIndex:url);//没有请求头的过滤
 			}
 		}
 	}
@@ -92,13 +92,14 @@ public class ShortUrlController {
 	@GetMapping("/saveSU")
 	public JSONObject longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest) {
 		JSONObject json = new JSONObject();
+		System.out.println(longUrl);
 		if (longUrl==""||longUrl==null) {
 			json.put("result", "fasle");
 			json.put("des", "参数错误");
 			return json;
 		}else {
 			YgfLongShortLink ygfLongShortLink = shortUrlService.insertShortLink(longUrl);
-			json.put("shortUrl", ygfLongShortLink.getShortlink());
+			json.put("shortUrl", httpRequest.getRequestURL().toString().replace(httpRequest.getServletPath(),"/")+ygfLongShortLink.getShortlink());
 			json.put("result", "success");
 			return json;
 		}

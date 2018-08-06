@@ -31,14 +31,17 @@
 		SELECT h.hours FROM ygf_hours h
 		) 
 		cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE recod.searchShort = #{shortUrl} AND 
-		DATE(recod.time) = CAST(#{begin} AS DATE) 
+		DATE(recod.time) = CAST(#{end} AS DATE) 
 		) sr ON cale.hours = HOUR(sr.time) 
 		GROUP BY cale.hours
 		)a;
   	</select>
   	<select id="selectEquitMent" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
   		SELECT COUNT(rec.equipment)value,rec.equipment name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
   		<if test="browser != '' and browser != null">
   			AND rec.browser = #{browser}
   		</if>
@@ -59,7 +62,10 @@
   	<select id="selectBrowser" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
   		SELECT GROUP_CONCAT(a.value)series ,GROUP_CONCAT(a.name)xAxis FROM (
   		SELECT COUNT(rec.browser)value,rec.browser name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
   		<if test="browser != '' and browser != null">
   			AND rec.browser = #{browser}
   		</if>
@@ -80,7 +86,10 @@
   	<select id="selectInternet" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
   		SELECT GROUP_CONCAT(a.value)series ,GROUP_CONCAT(a.name)xAxis FROM (
   		SELECT COUNT(split_str(rec.ipBelong,'-',4))value,split_str(rec.ipBelong,'-',4) name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
   		<if test="browser != '' and browser != null">
   			AND rec.browser = #{browser}
   		</if>
@@ -98,9 +107,12 @@
   		</if>
   		GROUP BY split_str(rec.ipBelong,'-',4))a
   	</select>
-  	<select id="selectInternet" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+  	<select id="selectResolution" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
   		SELECT COUNT(rec.resolution)value,rec.resolution name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
   		<if test="browser != '' and browser != null">
   			AND rec.browser = #{browser}
   		</if>
@@ -119,8 +131,11 @@
   		GROUP BY rec.resolution
   	</select>
   	<select id="selectAllRecord" parameterType="com.sun.service.data.SearchData" resultType="com.sun.entity.YgfDljSearchRecord">
-  		SELECT * FROM ygf_dlj_search_record recod WHERE
-  		DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND recod.searchShort = #{shortUrl}
+  		SELECT * FROM ygf_dlj_search_record rec
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
   		<if test="browser != '' and browser != null">
   			AND rec.browser = #{browser}
   		</if>
@@ -136,12 +151,37 @@
   		<if test="browser != '' and browser != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
-  		ORDER BY rec.time DESC
+  		ORDER BY rec.time DESC Limit #{startIndex},50;
+  	</select>
+  	<select id="selectAllRecordCount" parameterType="com.sun.service.data.SearchData" resultType="java.lang.Integer">
+  		SELECT count(1) FROM ygf_dlj_search_record rec
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
   	</select>
   	
   	<select id="selectIps" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.IPData">
-  		SELECT COUNT(rec.ip)count,rec.ipBelong,rec.ip FROM ygf_dlj_search_record rec WHERE 
-  		DATE(rec.time) >= CAST(#{begin} AS DATE) AND DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND recod.searchShort = #{shortUrl} 
+  		SELECT COUNT(rec.ip)count,rec.ipBelong,rec.ip FROM ygf_dlj_search_record rec 
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
   		<if test="browser != '' and browser != null">
   			AND rec.browser = #{browser}
   		</if>
@@ -157,10 +197,56 @@
   		<if test="browser != '' and browser != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
-  		GROUP BY rec.ip
+  		GROUP BY rec.ip ORDER BY COUNT(rec.ip) DESC LIMIT 0 , 50
   	</select>
   	<select id="topThree" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.TopThree">
   		SELECT COUNT(1)total,COUNT(DISTINCT rec.ip)ip,COUNT(DISTINCT rec.cookie)uv FROM ygf_dlj_search_record rec WHERE rec.searchShort = #{shortUrl}
   	</select>
-  	
+  	<select id="selectPrivonce" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+	  	SELECT split_str(rec.ipBelong,'-',2)name,COUNT(1)value FROM ygf_dlj_search_record rec 
+	  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if>
+		<if test="browser != '' and browser != null">
+			AND rec.browser = #{browser}
+		</if>
+		<if test="equipment != '' and equipment != null">
+			AND rec.equipment = #{equipment}
+		</if>
+		<if test="country != '' and country != null">
+			AND split_str(rec.ipBelong,'-',1) = #{country}
+		</if>
+		<if test="internet != '' and internet != null">
+			AND split_str(rec.ipBelong,'-',4) = #{internet}
+		</if>
+		<if test="browser != '' and browser != null">
+			AND IFNULL(rec.status,0) = #{status}
+		</if>
+		GROUP BY split_str(rec.ipBelong,'-',2);
+	</select>
+  	<select id="selectCity" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+	  	SELECT split_str(rec.ipBelong,'-',3)name,COUNT(1)value FROM ygf_dlj_search_record rec 
+	  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+			AND split_str(rec.ipBelong,'-',2) = #{province}
+  		<if test="begin != '' and begin != null">
+  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+  		</if> 
+		<if test="browser != '' and browser != null">
+  			AND rec.browser = #{browser}
+  		</if>
+  		<if test="equipment != '' and equipment != null">
+  			AND rec.equipment = #{equipment}
+  		</if>
+  		<if test="country != '' and country != null">
+  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  		</if>
+  		<if test="internet != '' and internet != null">
+  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  		</if>
+  		<if test="browser != '' and browser != null">
+  			AND IFNULL(rec.status,0) = #{status}
+  		</if>
+		GROUP BY split_str(rec.ipBelong,'-',2),split_str(rec.ipBelong,'-',3);
+  	</select>
 </mapper>

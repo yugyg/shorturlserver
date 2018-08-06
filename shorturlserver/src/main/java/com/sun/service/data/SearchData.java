@@ -24,7 +24,10 @@ public class SearchData {
 	private String internet;
 	/**跳转状态*/
 	private String status;
-	
+	/**省*/
+	private String province;
+	/**pageNum*/
+	private Integer startIndex = 0;
 	
 	public String getBrowser() {
 		return browser;
@@ -80,5 +83,16 @@ public class SearchData {
 	public void setShortUrl(String shortUrl) {
 		this.shortUrl = shortUrl;
 	}
-	
+	public String getProvince() {
+		return province;
+	}
+	public void setProvince(String province) {
+		this.province = province;
+	}
+	public Integer getStartIndex() {
+		return startIndex;
+	}
+	public void setStartIndex(Integer startIndex) {
+		this.startIndex = startIndex;
+	}
 }

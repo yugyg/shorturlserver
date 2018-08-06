@@ -2,7 +2,9 @@ package com.sun.service;
 
 import java.util.List;
 
+import com.sun.entity.YgfDljSearchRecord;
 import com.sun.entity.YgfLongShortLink;
+import com.sun.service.data.IPData;
 import com.sun.service.data.PieData;
 import com.sun.service.data.PublicResults;
 import com.sun.service.data.SearchData;
@@ -67,9 +69,45 @@ public interface ShortUrlService {
 	 */
 	PublicResults selectInternet(SearchData searchData);
 	/**
+	 * 分辨率
+	 * @param searchData
+	 * @return
+	 */
+	List<PieData> selectResolution(SearchData searchData);
+	/**
+	 * 全部数据
+	 * @param searchData
+	 * @return
+	 */
+	List<YgfDljSearchRecord> selectAllRecord(SearchData searchData);
+	/**
+	 * 查询总条数
+	 * @param searchData
+	 * @return
+	 */
+	Integer selectAllRecordCount(SearchData searchData);
+	/**
+	 * ip数据
+	 * @param searchData
+	 * @return
+	 */
+	List<IPData> selectIps(SearchData searchData);
+	/**
 	 * 顶部三个数据
 	 * @param searchData
 	 * @return
 	 */
 	TopThree topThree(SearchData searchData);
+	/**
+	 * 地图省信息
+	 * @param searchData
+	 * @return
+	 */
+	List<PieData> selectPrivonce(SearchData searchData);
+	/**
+	 * 地图市信息
+	 * @param searchData
+	 * @return
+	 */
+	List<PieData> selectCity(SearchData searchData);
 }

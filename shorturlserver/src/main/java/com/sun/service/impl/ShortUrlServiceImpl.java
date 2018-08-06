@@ -14,6 +14,7 @@ import com.sun.exmapper.YgfDljExMapper;
 import com.sun.mapper.YgfDljSearchRecordMapper;
 import com.sun.mapper.YgfLongShortLinkMapper;
 import com.sun.service.ShortUrlService;
+import com.sun.service.data.IPData;
 import com.sun.service.data.PieData;
 import com.sun.service.data.PublicResults;
 import com.sun.service.data.SearchData;
@@ -71,7 +72,7 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 		ygfDljSearchRecord.setSearchshort(searchShort);
 		ygfDljSearchRecord.setTime(new Date());
 		ygfDljSearchRecord.setCookie(cookie);
-		ygfDljSearchRecord.setStatus(0);
+		ygfDljSearchRecord.setStatus(Util.isEmpty(userAgent)?1:0);
 		ygfDljSearchRecord.setReferer(Util.isEmpty(referer)?"直接访问":referer);
 		YgfLongShortLink link = ygfDljExMapper.selectShortLink(searchShort);
 		ygfDljSearchRecord.setSearchlong(link == null?"no long link":link.getLonglink());
@@ -124,5 +125,28 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 	public TopThree topThree(SearchData searchData) {
 		return ygfDljExMapper.topThree(searchData);
 	}
-	
+	@Override
+	public List<PieData> selectResolution(SearchData searchData) {
+		return ygfDljExMapper.selectResolution(searchData);
+	}
+	@Override
+	public List<YgfDljSearchRecord> selectAllRecord(SearchData searchData) {
+		return ygfDljExMapper.selectAllRecord(searchData);
+	}
+	@Override
+	public List<IPData> selectIps(SearchData searchData) {
+		return ygfDljExMapper.selectIps(searchData);
+	}
+	@Override
+	public List<PieData> selectPrivonce(SearchData searchData) {
+		return ygfDljExMapper.selectPrivonce(searchData);
+	}
+	@Override
+	public List<PieData> selectCity(SearchData searchData) {
+		return ygfDljExMapper.selectCity(searchData);
+	}
+	@Override
+	public Integer selectAllRecordCount(SearchData searchData) {
+		return ygfDljExMapper.selectAllRecordCount(searchData);
+	}
 }
