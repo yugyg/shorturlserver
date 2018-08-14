@@ -17,7 +17,7 @@
 		SELECT COUNT(sr.id)total,COUNT(DISTINCT sr.cookie)uv,count(DISTINCT sr.ip)ipnum,SUM(if(IFNULL(sr.status,0)=0 AND IFNULL(sr.id,0) != 0,1,0))oklink,
 		SUM(if(IFNULL(sr.status,0)=1 AND IFNULL(sr.id,0) != 0,1,0)) errorlink,cale.time FROM
 		(
-		SELECT DATE(cal.date)time FROM ygf_calendar cal WHERE DATE(cal.date) >= DATE(date_sub(CAST(#{end} AS date), interval 8 DAY)) AND  cal.date &lt;= CAST(#{end} AS date)
+		SELECT DATE(cal.date)time FROM ygf_calendar cal WHERE DATE(cal.date) > DATE(date_sub(CAST(#{end} AS date), interval 8 DAY)) AND  cal.date &lt;= CAST(#{end} AS date)
 		) cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE searchLong = #{longUrl}) sr ON cale.time = DATE(sr.time) 
 		GROUP BY cale.time
 		)a;

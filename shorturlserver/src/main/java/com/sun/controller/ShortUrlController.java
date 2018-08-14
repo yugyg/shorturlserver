@@ -102,21 +102,21 @@ public class ShortUrlController {
 	 * @param httpRequest
 	 * @return
 	 */
-	@GetMapping("/saveSU")
-	public String longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest) {
+	@PostMapping("/saveSU")
+	public ResultEntity longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest) {
 		ResultEntity result = new ResultEntity();
 		Map<String, String> map = new HashMap<String,String>();
 		if (longUrl==""||longUrl==null) {
 			result.setResult(Const.result_fail);
 			result.setDesc("参数错误");
-			return "success";
+			return result;
 		}else {
 			YgfLongShortLink ygfLongShortLink = shortUrlService.insertShortLink(longUrl);
 			result.setResult(Const.result_success);
 			map.put("shortUrl", httpRequest.getRequestURL().toString().replace(httpRequest.getServletPath(),"/")+ygfLongShortLink.getShortlink());
 			map.put("longUrl", longUrl);
 			result.setData(map);
-			return "success";
+			return result;
 		}
 	}
 	/**

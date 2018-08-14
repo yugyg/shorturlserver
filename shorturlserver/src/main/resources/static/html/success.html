@@ -1,35 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>保存成功</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/font-awesome.min.css">
     <style>
         body {
             background-color: #edf0f4;
-            }
-            .main-header .navbar {
+        }
+
+        .main-header .navbar {
             background-color: #1997d6;
-            }
-            .main-header .navbar a {
+        }
+
+        .main-header .navbar a {
             color: #fff;
             background-color: #1997d6;
-            }
-            .main-header .navbar li.active a {
+        }
+
+        .main-header .navbar li.active a {
             background: rgba(0, 0, 0, 0.1);
             color: #f6f6f6;
-            }
-            .main-header .navbar a:hover {
+        }
+
+        .main-header .navbar a:hover {
             background: rgba(0, 0, 0, 0.1);
             color: #f6f6f6;
-            }
-            .navbar-toggle {
+        }
+
+        .navbar-toggle {
             color: #fff;
-            }
-            .box {
+        }
+
+        .box {
             position: relative;
             border-radius: 3px;
             background: #ffffff;
@@ -37,32 +44,37 @@
             margin-bottom: 20px;
             width: 100%;
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-            }
-            .box.box-success {
+        }
+
+        .box.box-success {
             border-top-color: #06d6a0;
-            }
-            .box-header.with-border {
+        }
+
+        .box-header.with-border {
             border-bottom: 1px solid #f4f4f4;
-            }
-            .box-header {
+        }
+
+        .box-header {
             color: #444;
             display: block;
             padding: 10px;
             position: relative;
-            }
-            .box-header .box-title {
+        }
+
+        .box-header .box-title {
             display: inline-block;
             font-size: 18px;
             margin: 0;
             line-height: 1;
-            }
-            .box-body {
+        }
+
+        .box-body {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
             border-bottom-right-radius: 3px;
             border-bottom-left-radius: 3px;
             padding: 10px;
-            }
+        }
     </style>
 </head>
 
@@ -84,13 +96,13 @@
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li id="nav-index">
-                            <a href="#">首页</a>
+                            <a href="/html/saveUrl.html">首页</a>
                         </li>
                         <li id="nav-portal" class="active">
-                            <a href="#">用户中心</a>
+                            <a>用户中心</a>
                         </li>
                         <li id="nav-demo">
-                            <a href="#" style="font-weight: bold;">统计报表</a>
+                            <a id="dataSearch" style="font-weight: bold;">统计报表</a>
                         </li>
                     </ul>
                 </div>
@@ -99,7 +111,6 @@
             <!-- /.container-fluid -->
         </nav>
     </header>
-    <main>
         <div class="container">
             <!-- 短网址生成结果 -->
             <div class="row">
@@ -110,15 +121,23 @@
                         </div>
                         <div class="box-body">
                             <div class="input-group input-group-lg">
-                                <input type="text" id="short_url_input" class="form-control" value="https://0x9.me/LPgUh">
+                                <input type="text" id="short_url_input" class="form-control" value="">
                                 <span class="input-group-btn">
                                     <button id="cpbtn" type="button" class="btn btn-info" data-clipboard-target="#short_url_input">复制
                                     </button>
                                 </span>
                             </div>
                             <blockquote style="margin-top: 10px; word-break: break-all; word-wrap: break-word;">
-                                <footer>原网址:https://0x3.me/info/demo?from=slink</footer>
+                                <footer>原网址:<span id="orgUrl"></span></footer>
                             </blockquote>
+                            <hr>
+                            <p>短网址二维码</p>
+                            <div id="qrcode" style="width:240px;height:240px;margin: 0 auto;">
+                                <img id="qrimage" style="width:230px;height:230px;" src="http://qr.api.cli.im/qr?data=https%253A%252F%252Fcli.im%252F&amp;level=H&amp;transparent=false&amp;bgcolor=%23ffffff&amp;forecolor=%23000000&amp;blockpixel=12&amp;marginblock=1&amp;logourl=&amp;size=280&amp;kid=cliim&amp;key=8a615f67ca33d3cb30e220c8e22e6bb3">
+                            </div>
+                            <div style="margin: 20px 0">
+                                <a href="https://cli.im/url" target="_blank" class="btn btn-block btn-info">美化二维码（改尺寸、颜色、添加头像Logo等）</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -129,41 +148,64 @@
                 <div class="col-md-8 col-md-offset-2">
                     <div class="box box-success">
                         <div class="box-header with-border">
-                            <h3 class="box-title">继续添加</h3>
+                            <h3 class="box-title" style="display:block;"><button id="continueAdd" class="btn btn-block btn-info">继续添加</button></h3>
                         </div>
-                        <div class="box-body">
-                            <form method="post" action="">
+                        <!-- <div class="box-body">
                                 <div class="input-group input-group-lg">
                                     <input type="text" name="url" autocomplete="off" class="form-control" value="" placeholder="请输入要压缩的网址">
-                                    <!-- <input type="hidden" name="__HASH__" value="B3A1437C-6CA89498-41B25EBA-02769CE3"> -->
+                                    <input type="hidden" name="__HASH__" value="B3A1437C-6CA89498-41B25EBA-02769CE3">
                                     <span class="input-group-btn">
                                         <button id="getnew" type="submit" class="btn btn-success">
                                             获取短网址
                                         </button>
                                     </span>
                                 </div>
-                            </form>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
 
         </div>
-    </main>
-<script src="../js/jquery-1.11.1.js"></script>
-<script src="../js/bootstrap.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
-<script>
-    var clipboard = new ClipboardJS('#cpbtn');
-    clipboard.on('success', function(e) {
-        $("#cpbtn").text("复制成功");
-        // console.info('Action:', e.action);
-        // console.info('Text:', e.text);
-        // console.info('Trigger:', e.trigger);
-
-        e.clearSelection();
-    });
-</script>
+    <script src="../js/jquery-1.11.1.js"></script>
+	<script src="../js/bootstrap.js"></script>
+	<script src="../js/jquery.qrcode.min.js"></script>
+	<script src="../js/saveUrl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+    <script>
+        // 复制
+        var clipboard = new ClipboardJS('#cpbtn');
+        clipboard.on('success', function (e) {
+            $("#cpbtn").text("复制成功");
+            // console.info('Action:', e.action);
+            // console.info('Text:', e.text);
+            // console.info('Trigger:', e.trigger);
+            e.clearSelection();
+        });
+        $(function(){
+        	var url = window.location.search.replace("?shortUrl=","");
+        	$("#short_url_input").val(url.trim())
+        	$("#qrimage").qrcode({
+				render: "canvas", //table方式
+				width: 112, //宽度
+				height:112, //高度
+				text: url.trim() //任意内容
+			});
+            $.ajax({
+                url:'/getLongUrl?shortUrl='+url.substr(url.lastIndexOf("/")+1),
+                type:'get',
+                success:function (data) {
+                    if( data && data.result == "success" ) $("#orgUrl").text(data.data.longUrl);
+                    else alert("网络出问题了，请刷新后查看！");
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        });
+        $("#continueAdd").on("click",function(){
+        	window.location.href="/html/saveUrl.html";
+        })
+    </script>
 </body>
 
 </html>

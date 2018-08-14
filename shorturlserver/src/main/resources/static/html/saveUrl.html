@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/bootstrap.css">
     <style>
-        .container {
+        #page{
             margin-top:80px;
             background-color: #edf0f4;
             padding-bottom:80px;
@@ -21,24 +21,77 @@
             background-color: #058f6a;
             color:#fff;
         }
+        /* header头部   start*/
+        .main-header .navbar {
+            background-color: #1997d6;
+        }
+
+        .main-header .navbar a {
+            color: #fff;
+            background-color: #1997d6;
+        }
+
+        .main-header .navbar li.active a {
+            background: rgba(0, 0, 0, 0.1);
+            color: #f6f6f6;
+        }
+
+        .main-header .navbar a:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #f6f6f6;
+        }
+        .navbar-toggle {
+            color: #fff;
+        }
+        /* header end */
     </style>
 </head>
 <body>
-    <div class="container">
+	<header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" rel="home"  title="愚公坊">
+                        <!-- <img style="max-width:100px; margin-top: -5px;" src="//cdn.link-hub.cn/0x3.me/static/image/logo-cartoon-3.png"> -->
+                        愚公坊
+                    </a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li id="nav-index">
+                            <a href="/html/saveUrl.html">首页</a>
+                        </li>
+                        <li id="nav-demo">
+                            <a id="dataSearch" style="font-weight: bold;">统计报表</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+    <div class="container" id="page">
         <section class="content">
-            <form action="/saveSU">
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4" style="margin-top:176px; border: 1px solid rgba(150,150,150,0.29); padding:8px; border-radius: 3px;">
-                        <input type="text" name="longUrl" class="form-control input-lg col-md-4" placeholder="请输入要压缩的网址" autocomplete="off">
+                        <input type="text" id="longUrl" class="form-control input-lg col-md-4" placeholder="请输入要压缩的网址" autocomplete="off">
                     </div>
                 </div>
                 <div class="row">
                     <div style="width:124px; height:46px; margin:20px auto 0 auto">
-                        <input type="submit" value="获取短网址" class="btn btn-lg bg-olive" >
+                        <input type="button" value="获取短网址" class="btn btn-lg bg-olive" id="subm" >
                     </div>
                 </div>
-            </form>
         </section>
     </div>
 </body>
+<script type="text/javascript" src="../js/jquery-1.11.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/saveUrl.js"></script>
 </html>
