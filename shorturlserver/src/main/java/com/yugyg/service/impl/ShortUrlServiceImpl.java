@@ -16,7 +16,6 @@ import com.yugyg.entity.YgfProvince;
 import com.yugyg.exmapper.YgfDljExMapper;
 import com.yugyg.mapper.YgfDljSearchRecordMapper;
 import com.yugyg.mapper.YgfLongShortLinkMapper;
-import com.yugyg.mapper.YgfProvinceMapper;
 import com.yugyg.service.ShortUrlService;
 import com.yugyg.service.data.IPData;
 import com.yugyg.service.data.PieData;
