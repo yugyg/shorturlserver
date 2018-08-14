@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sun.exmapper.YgfDljExMapper">
-  	<select id="selectShortLink" parameterType="java.lang.String" resultType="com.sun.entity.YgfLongShortLink">
+<mapper namespace="com.yugyg.exmapper.YgfDljExMapper">
+  	<select id="selectShortLink" parameterType="java.lang.String" resultType="com.yugyg.entity.YgfLongShortLink">
   		SELECT * FROM ygf_long_short_link lsl WHERE lsl.shortLink = #{shortLink}
   	</select>
-  	<select id="selectByShortLink" parameterType="java.lang.String" resultType="com.sun.entity.YgfLongShortLink">
+  	<select id="selectByShortLink" parameterType="java.lang.String" resultType="com.yugyg.entity.YgfLongShortLink">
   		SELECT * FROM ygf_long_short_link lsl WHERE lsl.shortLink LIKE #{shortLink} ORDER BY lsl.time DESC
   	</select>
-  	<select id="selectByLongLink" parameterType="java.lang.String" resultType="com.sun.entity.YgfLongShortLink">
+  	<select id="selectByLongLink" parameterType="java.lang.String" resultType="com.yugyg.entity.YgfLongShortLink">
   		SELECT * FROM ygf_long_short_link lsl WHERE lsl.longLink = #{longLink} 
   	</select>
-  	<select id="selectSevenDaysData" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.SevenDaysData">
+  	<select id="selectSevenDaysData" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.SevenDaysData">
 		SELECT GROUP_CONCAT(a.total)total,GROUP_CONCAT(a.uv)uv,GROUP_CONCAT(a.ipnum)ipnum,GROUP_CONCAT(a.oklink)oklink,GROUP_CONCAT(a.errorlink)errorlink,
 		GROUP_CONCAT(a.time)xData FROM 
 		(
@@ -22,7 +22,7 @@
 		GROUP BY cale.time
 		)a;
   	</select>
-  	<select id="selectTwentyHours" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.SevenDaysData">
+  	<select id="selectTwentyHours" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.SevenDaysData">
 		SELECT GROUP_CONCAT(a.total)total,GROUP_CONCAT(a.uv)uv,GROUP_CONCAT(a.ipnum)ipnum,GROUP_CONCAT(a.oklink)oklink,GROUP_CONCAT(a.errorlink)errorlink,GROUP_CONCAT(a.time)xData FROM 
 		(
 		SELECT COUNT(sr.id)total,COUNT(DISTINCT sr.cookie)uv,count(DISTINCT sr.ip)ipnum,SUM(if(IFNULL(sr.status,0)=0 AND IFNULL(sr.id,0) != 0,1,0))oklink,
@@ -42,7 +42,7 @@
 		GROUP BY cale.time ORDER BY cale.date,cale.hours
 		)a;
   	</select>
-  	<select id="selectEquitMent" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+  	<select id="selectEquitMent" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PieData">
   		SELECT COUNT(rec.equipment)value,rec.equipment name FROM ygf_dlj_search_record rec 
   		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
@@ -65,7 +65,7 @@
   		</if>
   		GROUP BY rec.equipment ORDER BY COUNT(rec.equipment) DESC
   	</select>
-  	<select id="selectBrowser" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
+  	<select id="selectBrowser" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PublicResults">
   		SELECT GROUP_CONCAT(a.value)seriesStr ,GROUP_CONCAT(a.name)xAxis FROM (
   		SELECT COUNT(rec.browser)value,rec.browser name FROM ygf_dlj_search_record rec 
   		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
@@ -89,7 +89,7 @@
   		</if>
   		GROUP BY rec.browser)a
   	</select>
-  	<select id="selectInternet" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
+  	<select id="selectInternet" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PublicResults">
   		SELECT GROUP_CONCAT(a.value)seriesStr ,GROUP_CONCAT(a.name)xAxis FROM (
   		SELECT COUNT(split_str(rec.ipBelong,'-',4))value,split_str(rec.ipBelong,'-',4) name FROM ygf_dlj_search_record rec 
   		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
@@ -113,7 +113,7 @@
   		</if>
   		GROUP BY split_str(rec.ipBelong,'-',4))a
   	</select>
-  	<select id="selectResolution" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+  	<select id="selectResolution" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PieData">
   		SELECT COUNT(rec.resolution)value,rec.resolution name FROM ygf_dlj_search_record rec 
   		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
@@ -136,7 +136,7 @@
   		</if>
   		GROUP BY rec.resolution
   	</select>
-  	<select id="selectAllRecord" parameterType="com.sun.service.data.SearchData" resultType="com.sun.entity.YgfDljSearchRecord">
+  	<select id="selectAllRecord" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.entity.YgfDljSearchRecord">
   		SELECT * FROM ygf_dlj_search_record rec
   		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
@@ -159,7 +159,7 @@
   		</if>
   		ORDER BY rec.time DESC Limit #{startIndex},50;
   	</select>
-  	<select id="selectAllRecordCount" parameterType="com.sun.service.data.SearchData" resultType="java.lang.Integer">
+  	<select id="selectAllRecordCount" parameterType="com.yugyg.service.data.SearchData" resultType="java.lang.Integer">
   		SELECT count(1) FROM ygf_dlj_search_record rec
   		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
@@ -182,7 +182,7 @@
   		</if>
   	</select>
   	
-  	<select id="selectIps" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.IPData">
+  	<select id="selectIps" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.IPData">
   		SELECT COUNT(rec.ip)count,rec.ipBelong,rec.ip FROM ygf_dlj_search_record rec 
   		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
@@ -205,10 +205,10 @@
   		</if>
   		GROUP BY rec.ip ORDER BY COUNT(rec.ip) DESC LIMIT 0 , 50
   	</select>
-  	<select id="topThree" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.TopThree">
+  	<select id="topThree" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.TopThree">
   		SELECT COUNT(1)total,COUNT(DISTINCT rec.ip)ip,COUNT(DISTINCT rec.cookie)uv FROM ygf_dlj_search_record rec WHERE rec.searchLong = #{longUrl}
   	</select>
-  	<select id="selectPrivonce" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+  	<select id="selectPrivonce" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PieData">
 		SELECT p.p_name name,IFNULL(recd.value,0)value FROM 
 			(
 				SELECT replace(replace(replace(replace(replace(replace(replace(ygf_province.province_name,"省",''),"市",''),"壮族自治区",''),"回族自治区",''),"维吾尔自治区",''),"自治区",''),"特别行政区",'')p_name FROM ygf_province
@@ -266,7 +266,7 @@
 			GROUP BY pc.p_c ORDER BY IFNULL(recd.value,0) DESC
 		); -->
 	</select>
-  	<select id="selectCity" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
+  	<select id="selectCity" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PieData">
 		SELECT pc.c_name name,IFNULL(recd.value,0)value FROM 
 			(
 				SELECT replace(replace(replace(replace(replace(replace(replace(CONCAT(p.province_name,c.city_name),"省",''),"市",''),"壮族自治区",''),"回族自治区",''),"维吾尔自治区",''),"自治区",''),"特别行政区",'')
@@ -295,10 +295,10 @@
 			)recd ON recd.p_c like pc.p_c
 			GROUP BY pc.p_c ORDER BY IFNULL(recd.value,0) DESC ,pc.p_c 
   	</select>
-	<select id="getAllProvince" resultType="com.sun.entity.YgfProvince">
+	<select id="getAllProvince" resultType="com.yugyg.entity.YgfProvince">
 		SELECT * FROM ygf_province;
 	</select>
-	<select id="getAllCity" resultType="com.sun.entity.YgfCity">
+	<select id="getAllCity" resultType="com.yugyg.entity.YgfCity">
 		SELECT * FROM ygf_city;
 	</select>
 </mapper>

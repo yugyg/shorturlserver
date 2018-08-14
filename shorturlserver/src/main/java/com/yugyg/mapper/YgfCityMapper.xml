@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sun.mapper.YgfCityMapper">
-  <resultMap id="BaseResultMap" type="com.sun.entity.YgfCity">
+<mapper namespace="com.yugyg.mapper.YgfCityMapper">
+  <resultMap id="BaseResultMap" type="com.yugyg.entity.YgfCity">
     <id column="city_id" jdbcType="BIGINT" property="cityId" />
     <result column="city_code" jdbcType="VARCHAR" property="cityCode" />
     <result column="province_id" jdbcType="BIGINT" property="provinceId" />
@@ -20,13 +20,13 @@
     delete from ygf_city
     where city_id = #{cityId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.sun.entity.YgfCity">
+  <insert id="insert" parameterType="com.yugyg.entity.YgfCity">
     insert into ygf_city (city_id, city_code, province_id, 
       city_name)
     values (#{cityId,jdbcType=BIGINT}, #{cityCode,jdbcType=VARCHAR}, #{provinceId,jdbcType=BIGINT}, 
       #{cityName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.sun.entity.YgfCity">
+  <insert id="insertSelective" parameterType="com.yugyg.entity.YgfCity">
     insert into ygf_city
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="cityId != null">
@@ -57,7 +57,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sun.entity.YgfCity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yugyg.entity.YgfCity">
     update ygf_city
     <set>
       <if test="cityCode != null">
@@ -72,7 +72,7 @@
     </set>
     where city_id = #{cityId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sun.entity.YgfCity">
+  <update id="updateByPrimaryKey" parameterType="com.yugyg.entity.YgfCity">
     update ygf_city
     set city_code = #{cityCode,jdbcType=VARCHAR},
       province_id = #{provinceId,jdbcType=BIGINT},

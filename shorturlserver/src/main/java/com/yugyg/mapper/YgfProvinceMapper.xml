@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sun.mapper.YgfProvinceMapper">
-  <resultMap id="BaseResultMap" type="com.sun.entity.YgfProvince">
+<mapper namespace="com.yugyg.mapper.YgfProvinceMapper">
+  <resultMap id="BaseResultMap" type="com.yugyg.entity.YgfProvince">
     <id column="province_id" jdbcType="BIGINT" property="provinceId" />
     <result column="province_code" jdbcType="VARCHAR" property="provinceCode" />
     <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
@@ -19,13 +19,13 @@
     delete from ygf_province
     where province_id = #{provinceId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.sun.entity.YgfProvince">
+  <insert id="insert" parameterType="com.yugyg.entity.YgfProvince">
     insert into ygf_province (province_id, province_code, province_name
       )
     values (#{provinceId,jdbcType=BIGINT}, #{provinceCode,jdbcType=VARCHAR}, #{provinceName,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.sun.entity.YgfProvince">
+  <insert id="insertSelective" parameterType="com.yugyg.entity.YgfProvince">
     insert into ygf_province
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="provinceId != null">
@@ -50,7 +50,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sun.entity.YgfProvince">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yugyg.entity.YgfProvince">
     update ygf_province
     <set>
       <if test="provinceCode != null">
@@ -62,7 +62,7 @@
     </set>
     where province_id = #{provinceId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sun.entity.YgfProvince">
+  <update id="updateByPrimaryKey" parameterType="com.yugyg.entity.YgfProvince">
     update ygf_province
     set province_code = #{provinceCode,jdbcType=VARCHAR},
       province_name = #{provinceName,jdbcType=VARCHAR}

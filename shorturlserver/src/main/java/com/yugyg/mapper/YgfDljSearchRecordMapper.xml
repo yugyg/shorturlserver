@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sun.mapper.YgfDljSearchRecordMapper">
-  <resultMap id="BaseResultMap" type="com.sun.entity.YgfDljSearchRecord">
+<mapper namespace="com.yugyg.mapper.YgfDljSearchRecordMapper">
+  <resultMap id="BaseResultMap" type="com.yugyg.entity.YgfDljSearchRecord">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="time" jdbcType="TIMESTAMP" property="time" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
@@ -16,7 +16,7 @@
     <result column="userAgent" jdbcType="VARCHAR" property="useragent" />
     <result column="phoneNum" jdbcType="VARCHAR" property="phonenum" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sun.entity.YgfDljSearchRecord">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yugyg.entity.YgfDljSearchRecord">
     <result column="searchLong" jdbcType="LONGVARCHAR" property="searchlong" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -38,7 +38,7 @@
     delete from ygf_dlj_search_record
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.sun.entity.YgfDljSearchRecord">
+  <insert id="insert" parameterType="com.yugyg.entity.YgfDljSearchRecord">
     insert into ygf_dlj_search_record (id, time, ip, 
       browser, equipment, searchShort, 
       ipBelong, resolution, status, 
@@ -50,7 +50,7 @@
       #{cookie,jdbcType=VARCHAR}, #{referer,jdbcType=VARCHAR}, #{useragent,jdbcType=VARCHAR}, 
       #{phonenum,jdbcType=VARCHAR}, #{searchlong,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.sun.entity.YgfDljSearchRecord">
+  <insert id="insertSelective" parameterType="com.yugyg.entity.YgfDljSearchRecord">
     insert into ygf_dlj_search_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -141,7 +141,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sun.entity.YgfDljSearchRecord">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yugyg.entity.YgfDljSearchRecord">
     update ygf_dlj_search_record
     <set>
       <if test="time != null">
@@ -186,7 +186,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sun.entity.YgfDljSearchRecord">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yugyg.entity.YgfDljSearchRecord">
     update ygf_dlj_search_record
     set time = #{time,jdbcType=TIMESTAMP},
       ip = #{ip,jdbcType=VARCHAR},
@@ -203,7 +203,7 @@
       searchLong = #{searchlong,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sun.entity.YgfDljSearchRecord">
+  <update id="updateByPrimaryKey" parameterType="com.yugyg.entity.YgfDljSearchRecord">
     update ygf_dlj_search_record
     set time = #{time,jdbcType=TIMESTAMP},
       ip = #{ip,jdbcType=VARCHAR},

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sun.mapper.YgfLongShortLinkMapper">
-  <resultMap id="BaseResultMap" type="com.sun.entity.YgfLongShortLink">
+<mapper namespace="com.yugyg.mapper.YgfLongShortLinkMapper">
+  <resultMap id="BaseResultMap" type="com.yugyg.entity.YgfLongShortLink">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="shortLink" jdbcType="VARCHAR" property="shortlink" />
     <result column="time" jdbcType="TIMESTAMP" property="time" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sun.entity.YgfLongShortLink">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yugyg.entity.YgfLongShortLink">
     <result column="longLink" jdbcType="LONGVARCHAR" property="longlink" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -27,13 +27,13 @@
     delete from ygf_long_short_link
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.sun.entity.YgfLongShortLink">
+  <insert id="insert" parameterType="com.yugyg.entity.YgfLongShortLink">
     insert into ygf_long_short_link (id, shortLink, time, 
       longLink)
     values (#{id,jdbcType=BIGINT}, #{shortlink,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, 
       #{longlink,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.sun.entity.YgfLongShortLink">
+  <insert id="insertSelective" parameterType="com.yugyg.entity.YgfLongShortLink">
     insert into ygf_long_short_link
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sun.entity.YgfLongShortLink">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yugyg.entity.YgfLongShortLink">
     update ygf_long_short_link
     <set>
       <if test="shortlink != null">
@@ -79,14 +79,14 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sun.entity.YgfLongShortLink">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yugyg.entity.YgfLongShortLink">
     update ygf_long_short_link
     set shortLink = #{shortlink,jdbcType=VARCHAR},
       time = #{time,jdbcType=TIMESTAMP},
       longLink = #{longlink,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sun.entity.YgfLongShortLink">
+  <update id="updateByPrimaryKey" parameterType="com.yugyg.entity.YgfLongShortLink">
     update ygf_long_short_link
     set shortLink = #{shortlink,jdbcType=VARCHAR},
       time = #{time,jdbcType=TIMESTAMP}

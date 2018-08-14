@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sun.mapper.YgfHoursMapper">
-  <resultMap id="BaseResultMap" type="com.sun.entity.YgfHours">
+<mapper namespace="com.yugyg.mapper.YgfHoursMapper">
+  <resultMap id="BaseResultMap" type="com.yugyg.entity.YgfHours">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="hours" jdbcType="TINYINT" property="hours" />
   </resultMap>
@@ -18,11 +18,11 @@
     delete from ygf_hours
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.sun.entity.YgfHours">
+  <insert id="insert" parameterType="com.yugyg.entity.YgfHours">
     insert into ygf_hours (id, hours)
     values (#{id,jdbcType=BIGINT}, #{hours,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.sun.entity.YgfHours">
+  <insert id="insertSelective" parameterType="com.yugyg.entity.YgfHours">
     insert into ygf_hours
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -41,7 +41,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sun.entity.YgfHours">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yugyg.entity.YgfHours">
     update ygf_hours
     <set>
       <if test="hours != null">
@@ -50,7 +50,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sun.entity.YgfHours">
+  <update id="updateByPrimaryKey" parameterType="com.yugyg.entity.YgfHours">
     update ygf_hours
     set hours = #{hours,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}

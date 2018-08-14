@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = "com.sun.*")
-@MapperScan(value = "com.sun.*mapper")
+@ComponentScan(basePackages = "com.yugyg.*")
+@MapperScan(value = "com.yugyg.*mapper")
 @EnableAutoConfiguration
 @SpringBootApplication
 public class SpringBootApplicationStart implements CommandLineRunner
