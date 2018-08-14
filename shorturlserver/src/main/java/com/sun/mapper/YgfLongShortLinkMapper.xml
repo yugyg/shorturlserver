@@ -3,16 +3,23 @@
 <mapper namespace="com.sun.mapper.YgfLongShortLinkMapper">
   <resultMap id="BaseResultMap" type="com.sun.entity.YgfLongShortLink">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="longLink" jdbcType="VARCHAR" property="longlink" />
     <result column="shortLink" jdbcType="VARCHAR" property="shortlink" />
     <result column="time" jdbcType="TIMESTAMP" property="time" />
   </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sun.entity.YgfLongShortLink">
+    <result column="longLink" jdbcType="LONGVARCHAR" property="longlink" />
+  </resultMap>
   <sql id="Base_Column_List">
-    id, longLink, shortLink, time
+    id, shortLink, time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    longLink
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from ygf_long_short_link
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -21,10 +28,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.sun.entity.YgfLongShortLink">
-    insert into ygf_long_short_link (id, longLink, shortLink, 
-      time)
-    values (#{id,jdbcType=BIGINT}, #{longlink,jdbcType=VARCHAR}, #{shortlink,jdbcType=VARCHAR}, 
-      #{time,jdbcType=TIMESTAMP})
+    insert into ygf_long_short_link (id, shortLink, time, 
+      longLink)
+    values (#{id,jdbcType=BIGINT}, #{shortlink,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP}, 
+      #{longlink,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sun.entity.YgfLongShortLink">
     insert into ygf_long_short_link
@@ -32,22 +39,19 @@
       <if test="id != null">
         id,
       </if>
-      <if test="longlink != null">
-        longLink,
-      </if>
       <if test="shortlink != null">
         shortLink,
       </if>
       <if test="time != null">
         time,
       </if>
+      <if test="longlink != null">
+        longLink,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
-      </if>
-      <if test="longlink != null">
-        #{longlink,jdbcType=VARCHAR},
       </if>
       <if test="shortlink != null">
         #{shortlink,jdbcType=VARCHAR},
@@ -55,27 +59,36 @@
       <if test="time != null">
         #{time,jdbcType=TIMESTAMP},
       </if>
+      <if test="longlink != null">
+        #{longlink,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.sun.entity.YgfLongShortLink">
     update ygf_long_short_link
     <set>
-      <if test="longlink != null">
-        longLink = #{longlink,jdbcType=VARCHAR},
-      </if>
       <if test="shortlink != null">
         shortLink = #{shortlink,jdbcType=VARCHAR},
       </if>
       <if test="time != null">
         time = #{time,jdbcType=TIMESTAMP},
       </if>
+      <if test="longlink != null">
+        longLink = #{longlink,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sun.entity.YgfLongShortLink">
+    update ygf_long_short_link
+    set shortLink = #{shortlink,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      longLink = #{longlink,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sun.entity.YgfLongShortLink">
     update ygf_long_short_link
-    set longLink = #{longlink,jdbcType=VARCHAR},
-      shortLink = #{shortlink,jdbcType=VARCHAR},
+    set shortLink = #{shortlink,jdbcType=VARCHAR},
       time = #{time,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>

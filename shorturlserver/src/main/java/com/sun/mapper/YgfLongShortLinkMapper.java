@@ -13,5 +13,7 @@ public interface YgfLongShortLinkMapper {
 
     int updateByPrimaryKeySelective(YgfLongShortLink record);
 
+    int updateByPrimaryKeyWithBLOBs(YgfLongShortLink record);
+
     int updateByPrimaryKey(YgfLongShortLink record);
 }

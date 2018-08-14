@@ -17,28 +17,34 @@
 		SELECT COUNT(sr.id)total,COUNT(DISTINCT sr.cookie)uv,count(DISTINCT sr.ip)ipnum,SUM(if(IFNULL(sr.status,0)=0 AND IFNULL(sr.id,0) != 0,1,0))oklink,
 		SUM(if(IFNULL(sr.status,0)=1 AND IFNULL(sr.id,0) != 0,1,0)) errorlink,cale.time FROM
 		(
-		SELECT DATE(cal.date)time FROM ygf_calendar cal WHERE DATE(cal.date) >= DATE(date_sub(now(), interval 8 DAY)) AND  cal.date &lt;= NOW()
-		) cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE searchShort = #{shortUrl}) sr ON cale.time = DATE(sr.time) 
+		SELECT DATE(cal.date)time FROM ygf_calendar cal WHERE DATE(cal.date) >= DATE(date_sub(CAST(#{end} AS date), interval 8 DAY)) AND  cal.date &lt;= CAST(#{end} AS date)
+		) cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE searchLong = #{longUrl}) sr ON cale.time = DATE(sr.time) 
 		GROUP BY cale.time
 		)a;
   	</select>
   	<select id="selectTwentyHours" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.SevenDaysData">
-		SELECT GROUP_CONCAT(a.total)total,GROUP_CONCAT(a.uv)uv,GROUP_CONCAT(a.ipnum)ipnum,GROUP_CONCAT(a.oklink)oklink,GROUP_CONCAT(a.errorlink)errorlink,GROUP_CONCAT(a.hours)xData FROM 
+		SELECT GROUP_CONCAT(a.total)total,GROUP_CONCAT(a.uv)uv,GROUP_CONCAT(a.ipnum)ipnum,GROUP_CONCAT(a.oklink)oklink,GROUP_CONCAT(a.errorlink)errorlink,GROUP_CONCAT(a.time)xData FROM 
 		(
 		SELECT COUNT(sr.id)total,COUNT(DISTINCT sr.cookie)uv,count(DISTINCT sr.ip)ipnum,SUM(if(IFNULL(sr.status,0)=0 AND IFNULL(sr.id,0) != 0,1,0))oklink,
-		SUM(if(IFNULL(sr.status,0)=1 AND IFNULL(sr.id,0) != 0,1,0)) errorlink,cale.hours FROM
-		(
-		SELECT h.hours FROM ygf_hours h
+		SUM(if(IFNULL(sr.status,0)=1 AND IFNULL(sr.id,0) != 0,1,0)) errorlink,cale.time FROM
+		(SELECT CONCAT(DATE_FORMAT(c.date,"%m/%d "),IF(LENGTH(h.hours)=1,CONCAT("0",h.hours),h.hours),":00") time,c.date,h.hours FROM
+		(SELECT ygf_calendar.date FROM ygf_calendar WHERE 
+			ygf_calendar.date >= DATE(date_sub(CAST(#{end} AS datetime),INTERVAL +24 HOUR))
+		AND ygf_calendar.date &lt;= CAST(#{end} AS date)
+		) c ,
+		ygf_hours h WHERE (c.date = DATE(date_sub(CAST(#{end} AS datetime),INTERVAL +24 HOUR)) AND h.hours > HOUR(date_sub(CAST(#{end} AS datetime),INTERVAL +24 HOUR)))
+		OR ( c.date = DATE(CAST(#{end} AS datetime)) AND h.hours &lt;= HOUR(CAST(#{end} AS datetime)))
 		) 
-		cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE recod.searchShort = #{shortUrl} AND 
-		DATE(recod.time) = CAST(#{end} AS DATE) 
-		) sr ON cale.hours = HOUR(sr.time) 
-		GROUP BY cale.hours
+		cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE recod.searchLong = #{longUrl} AND 
+		recod.time >= date_sub(CAST(#{end} AS datetime),INTERVAL +24 HOUR)
+		AND recod.time &lt;= CAST(#{end} AS datetime)
+		) sr ON cale.time = DATE_FORMAT(sr.time,"%m/%d %h:00")
+		GROUP BY cale.time ORDER BY cale.date,cale.hours
 		)a;
   	</select>
   	<select id="selectEquitMent" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
   		SELECT COUNT(rec.equipment)value,rec.equipment name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
   			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
   		</if>
@@ -49,7 +55,7 @@
   			AND rec.equipment = #{equipment}
   		</if>
   		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
   		</if>
   		<if test="internet != '' and internet != null">
   			AND split_str(rec.ipBelong,'-',4) = #{internet}
@@ -57,12 +63,12 @@
   		<if test="browser != '' and browser != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
-  		GROUP BY rec.equipment
+  		GROUP BY rec.equipment ORDER BY COUNT(rec.equipment) DESC
   	</select>
   	<select id="selectBrowser" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
-  		SELECT GROUP_CONCAT(a.value)series ,GROUP_CONCAT(a.name)xAxis FROM (
+  		SELECT GROUP_CONCAT(a.value)seriesStr ,GROUP_CONCAT(a.name)xAxis FROM (
   		SELECT COUNT(rec.browser)value,rec.browser name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
   			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
   		</if>
@@ -73,7 +79,7 @@
   			AND rec.equipment = #{equipment}
   		</if>
   		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
   		</if>
   		<if test="internet != '' and internet != null">
   			AND split_str(rec.ipBelong,'-',4) = #{internet}
@@ -84,9 +90,9 @@
   		GROUP BY rec.browser)a
   	</select>
   	<select id="selectInternet" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PublicResults">
-  		SELECT GROUP_CONCAT(a.value)series ,GROUP_CONCAT(a.name)xAxis FROM (
+  		SELECT GROUP_CONCAT(a.value)seriesStr ,GROUP_CONCAT(a.name)xAxis FROM (
   		SELECT COUNT(split_str(rec.ipBelong,'-',4))value,split_str(rec.ipBelong,'-',4) name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
   			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
   		</if>
@@ -97,7 +103,7 @@
   			AND rec.equipment = #{equipment}
   		</if>
   		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
   		</if>
   		<if test="internet != '' and internet != null">
   			AND split_str(rec.ipBelong,'-',4) = #{internet}
@@ -109,7 +115,7 @@
   	</select>
   	<select id="selectResolution" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
   		SELECT COUNT(rec.resolution)value,rec.resolution name FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
   			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
   		</if>
@@ -120,7 +126,7 @@
   			AND rec.equipment = #{equipment}
   		</if>
   		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
   		</if>
   		<if test="internet != '' and internet != null">
   			AND split_str(rec.ipBelong,'-',4) = #{internet}
@@ -132,7 +138,7 @@
   	</select>
   	<select id="selectAllRecord" parameterType="com.sun.service.data.SearchData" resultType="com.sun.entity.YgfDljSearchRecord">
   		SELECT * FROM ygf_dlj_search_record rec
-  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
   			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
   		</if>
@@ -143,7 +149,7 @@
   			AND rec.equipment = #{equipment}
   		</if>
   		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
   		</if>
   		<if test="internet != '' and internet != null">
   			AND split_str(rec.ipBelong,'-',4) = #{internet}
@@ -155,7 +161,7 @@
   	</select>
   	<select id="selectAllRecordCount" parameterType="com.sun.service.data.SearchData" resultType="java.lang.Integer">
   		SELECT count(1) FROM ygf_dlj_search_record rec
-  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
   			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
   		</if>
@@ -166,7 +172,7 @@
   			AND rec.equipment = #{equipment}
   		</if>
   		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
   		</if>
   		<if test="internet != '' and internet != null">
   			AND split_str(rec.ipBelong,'-',4) = #{internet}
@@ -178,7 +184,7 @@
   	
   	<select id="selectIps" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.IPData">
   		SELECT COUNT(rec.ip)count,rec.ipBelong,rec.ip FROM ygf_dlj_search_record rec 
-  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
+  		WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl}
   		<if test="begin != '' and begin != null">
   			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
   		</if>
@@ -189,7 +195,7 @@
   			AND rec.equipment = #{equipment}
   		</if>
   		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
+  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
   		</if>
   		<if test="internet != '' and internet != null">
   			AND split_str(rec.ipBelong,'-',4) = #{internet}
@@ -200,53 +206,99 @@
   		GROUP BY rec.ip ORDER BY COUNT(rec.ip) DESC LIMIT 0 , 50
   	</select>
   	<select id="topThree" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.TopThree">
-  		SELECT COUNT(1)total,COUNT(DISTINCT rec.ip)ip,COUNT(DISTINCT rec.cookie)uv FROM ygf_dlj_search_record rec WHERE rec.searchShort = #{shortUrl}
+  		SELECT COUNT(1)total,COUNT(DISTINCT rec.ip)ip,COUNT(DISTINCT rec.cookie)uv FROM ygf_dlj_search_record rec WHERE rec.searchLong = #{longUrl}
   	</select>
   	<select id="selectPrivonce" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
-	  	SELECT split_str(rec.ipBelong,'-',2)name,COUNT(1)value FROM ygf_dlj_search_record rec 
-	  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
-  		<if test="begin != '' and begin != null">
-  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
-  		</if>
-		<if test="browser != '' and browser != null">
-			AND rec.browser = #{browser}
-		</if>
-		<if test="equipment != '' and equipment != null">
-			AND rec.equipment = #{equipment}
-		</if>
-		<if test="country != '' and country != null">
-			AND split_str(rec.ipBelong,'-',1) = #{country}
-		</if>
-		<if test="internet != '' and internet != null">
-			AND split_str(rec.ipBelong,'-',4) = #{internet}
-		</if>
-		<if test="browser != '' and browser != null">
-			AND IFNULL(rec.status,0) = #{status}
-		</if>
-		GROUP BY split_str(rec.ipBelong,'-',2);
+		SELECT p.p_name name,IFNULL(recd.value,0)value FROM 
+			(
+				SELECT replace(replace(replace(replace(replace(replace(replace(ygf_province.province_name,"省",''),"市",''),"壮族自治区",''),"回族自治区",''),"维吾尔自治区",''),"自治区",''),"特别行政区",'')p_name FROM ygf_province
+			)p LEFT JOIN 
+			(SELECT split_str(rec.ipBelong,'-',2)name,COUNT(1)value FROM ygf_dlj_search_record rec
+				  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl} 
+				  	<if test="begin != '' and begin != null">
+			  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+			  		</if>
+					<if test="browser != '' and browser != null">
+						AND rec.browser = #{browser}
+					</if>
+					<if test="equipment != '' and equipment != null">
+						AND rec.equipment = #{equipment}
+					</if>
+					<if test="country != '' and country != null">
+						AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+					</if>
+					<if test="internet != '' and internet != null">
+						AND split_str(rec.ipBelong,'-',4) = #{internet}
+					</if>
+					<if test="browser != '' and browser != null">
+						AND IFNULL(rec.status,0) = #{status}
+					</if>
+					GROUP BY split_str(rec.ipBelong,'-',2)
+			)recd ON recd.name like p.p_name
+			GROUP BY p.p_name ORDER BY IFNULL(recd.value,0) DESC
+		<!-- UNION ALL
+		(SELECT pc.c_name name,IFNULL(recd.value,0)value FROM 
+			(
+				SELECT replace(replace(replace(replace(replace(replace(replace(CONCAT(p.province_name,c.city_name),"省",''),"市",''),"壮族自治区",''),"回族自治区",''),"维吾尔自治区",''),"自治区",''),"特别行政区",'')
+				p_c,(c.city_name)c_name FROM ygf_province p LEFT JOIN ygf_city c ON p.province_id = c.province_id
+			)pc LEFT JOIN 
+			(SELECT CONCAT(split_str(rec.ipBelong,'-',2),split_str(rec.ipBelong,'-',3))p_c,COUNT(1) value FROM ygf_dlj_search_record rec
+				  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl} GROUP BY split_str(rec.ipBelong,'-',2),split_str(rec.ipBelong,'-',3)
+				  	<if test="begin != '' and begin != null">
+			  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+			  		</if>
+					<if test="browser != '' and browser != null">
+						AND rec.browser = #{browser}
+					</if>
+					<if test="equipment != '' and equipment != null">
+						AND rec.equipment = #{equipment}
+					</if>
+					<if test="country != '' and country != null">
+						AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+					</if>
+					<if test="internet != '' and internet != null">
+						AND split_str(rec.ipBelong,'-',4) = #{internet}
+					</if>
+					<if test="browser != '' and browser != null">
+						AND IFNULL(rec.status,0) = #{status}
+					</if>
+			)recd ON recd.p_c like pc.p_c
+			GROUP BY pc.p_c ORDER BY IFNULL(recd.value,0) DESC
+		); -->
 	</select>
   	<select id="selectCity" parameterType="com.sun.service.data.SearchData" resultType="com.sun.service.data.PieData">
-	  	SELECT split_str(rec.ipBelong,'-',3)name,COUNT(1)value FROM ygf_dlj_search_record rec 
-	  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchShort = #{shortUrl}
-			AND split_str(rec.ipBelong,'-',2) = #{province}
-  		<if test="begin != '' and begin != null">
-  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
-  		</if> 
-		<if test="browser != '' and browser != null">
-  			AND rec.browser = #{browser}
-  		</if>
-  		<if test="equipment != '' and equipment != null">
-  			AND rec.equipment = #{equipment}
-  		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',1) = #{country}
-  		</if>
-  		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
-  		</if>
-  		<if test="browser != '' and browser != null">
-  			AND IFNULL(rec.status,0) = #{status}
-  		</if>
-		GROUP BY split_str(rec.ipBelong,'-',2),split_str(rec.ipBelong,'-',3);
+		SELECT pc.c_name name,IFNULL(recd.value,0)value FROM 
+			(
+				SELECT replace(replace(replace(replace(replace(replace(replace(CONCAT(p.province_name,c.city_name),"省",''),"市",''),"壮族自治区",''),"回族自治区",''),"维吾尔自治区",''),"自治区",''),"特别行政区",'')
+				p_c,(c.city_name)c_name FROM ygf_province p LEFT JOIN ygf_city c ON p.province_id = c.province_id WHERE p.province_name LIKE CONCAT("%",#{province},"%")
+			)pc LEFT JOIN 
+			(SELECT CONCAT(split_str(rec.ipBelong,'-',2),split_str(rec.ipBelong,'-',3))p_c,COUNT(1) value FROM ygf_dlj_search_record rec
+				  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl} AND split_str(rec.ipBelong,'-',2) = #{province} GROUP BY split_str(rec.ipBelong,'-',3)
+				  	<if test="begin != '' and begin != null">
+			  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
+			  		</if>
+					<if test="browser != '' and browser != null">
+						AND rec.browser = #{browser}
+					</if>
+					<if test="equipment != '' and equipment != null">
+						AND rec.equipment = #{equipment}
+					</if>
+					<if test="country != '' and country != null">
+						AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+					</if>
+					<if test="internet != '' and internet != null">
+						AND split_str(rec.ipBelong,'-',4) = #{internet}
+					</if>
+					<if test="browser != '' and browser != null">
+						AND IFNULL(rec.status,0) = #{status}
+					</if>
+			)recd ON recd.p_c like pc.p_c
+			GROUP BY pc.p_c ORDER BY IFNULL(recd.value,0) DESC ,pc.p_c 
   	</select>
+	<select id="getAllProvince" resultType="com.sun.entity.YgfProvince">
+		SELECT * FROM ygf_province;
+	</select>
+	<select id="getAllCity" resultType="com.sun.entity.YgfCity">
+		SELECT * FROM ygf_city;
+	</select>
 </mapper>

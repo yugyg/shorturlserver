@@ -18,6 +18,8 @@ public class PublicResults {
 	private String legendData;
 	//{"320, 302, 301, 334, 390, 330, 320","320, 302, 301, 334, 390, 330, 320"}
 	private String[] series;
+	//str
+	private String seriesStr;
 	//是否是名值集合
 	private Integer isNameValue;
 	{isNameValue = 0;}
@@ -40,6 +42,12 @@ public class PublicResults {
 	}
 	public void setSeries(String[] series) {
 		this.series = series;
+	}
+	public String getSeriesStr() {
+		return seriesStr;
+	}
+	public void setSeriesStr(String seriesStr) {
+		this.seriesStr = seriesStr;
 	}
 	public Integer getIsNameValue() {
 		return isNameValue;

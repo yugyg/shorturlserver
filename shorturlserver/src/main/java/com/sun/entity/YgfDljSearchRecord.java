@@ -15,8 +15,6 @@ public class YgfDljSearchRecord {
 
     private String searchshort;
 
-    private String searchlong;
-
     private String ipbelong;
 
     private String resolution;
@@ -26,6 +24,12 @@ public class YgfDljSearchRecord {
     private String cookie;
 
     private String referer;
+
+    private String useragent;
+
+    private String phonenum;
+
+    private String searchlong;
 
     public Long getId() {
         return id;
@@ -75,14 +79,6 @@ public class YgfDljSearchRecord {
         this.searchshort = searchshort == null ? null : searchshort.trim();
     }
 
-    public String getSearchlong() {
-        return searchlong;
-    }
-
-    public void setSearchlong(String searchlong) {
-        this.searchlong = searchlong == null ? null : searchlong.trim();
-    }
-
     public String getIpbelong() {
         return ipbelong;
     }
@@ -121,5 +117,29 @@ public class YgfDljSearchRecord {
 
     public void setReferer(String referer) {
         this.referer = referer == null ? null : referer.trim();
+    }
+
+    public String getUseragent() {
+        return useragent;
+    }
+
+    public void setUseragent(String useragent) {
+        this.useragent = useragent == null ? null : useragent.trim();
+    }
+
+    public String getPhonenum() {
+        return phonenum;
+    }
+
+    public void setPhonenum(String phonenum) {
+        this.phonenum = phonenum == null ? null : phonenum.trim();
+    }
+
+    public String getSearchlong() {
+        return searchlong;
+    }
+
+    public void setSearchlong(String searchlong) {
+        this.searchlong = searchlong == null ? null : searchlong.trim();
     }
 }

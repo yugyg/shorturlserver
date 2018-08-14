@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.sun.entity.YgfDljSearchRecord;
 import com.sun.entity.YgfLongShortLink;
+import com.sun.entity.YgfProvince;
 import com.sun.service.data.IPData;
 import com.sun.service.data.PieData;
 import com.sun.service.data.PublicResults;
 import com.sun.service.data.SearchData;
-import com.sun.service.data.SevenDaysData;
 import com.sun.service.data.TopThree;
 
 /**
@@ -45,7 +45,7 @@ public interface ShortUrlService {
 	PublicResults selectSevenDaysData(SearchData searchData);
 	
 	/**
-	 * 
+	 * 24小时
 	 * @param searchData
 	 * @return
 	 */
@@ -110,4 +110,10 @@ public interface ShortUrlService {
 	 * @return
 	 */
 	List<PieData> selectCity(SearchData searchData);
+	/**
+	 * 获得所有省份
+	 * @param searchData
+	 * @return
+	 */
+	List<YgfProvince> getAllProvince();
 }

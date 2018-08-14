@@ -13,5 +13,7 @@ public interface YgfDljSearchRecordMapper {
 
     int updateByPrimaryKeySelective(YgfDljSearchRecord record);
 
+    int updateByPrimaryKeyWithBLOBs(YgfDljSearchRecord record);
+
     int updateByPrimaryKey(YgfDljSearchRecord record);
 }

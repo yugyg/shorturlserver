@@ -8,20 +8,29 @@
     <result column="browser" jdbcType="VARCHAR" property="browser" />
     <result column="equipment" jdbcType="VARCHAR" property="equipment" />
     <result column="searchShort" jdbcType="VARCHAR" property="searchshort" />
-    <result column="searchLong" jdbcType="VARCHAR" property="searchlong" />
     <result column="ipBelong" jdbcType="VARCHAR" property="ipbelong" />
     <result column="resolution" jdbcType="VARCHAR" property="resolution" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="cookie" jdbcType="VARCHAR" property="cookie" />
     <result column="referer" jdbcType="VARCHAR" property="referer" />
+    <result column="userAgent" jdbcType="VARCHAR" property="useragent" />
+    <result column="phoneNum" jdbcType="VARCHAR" property="phonenum" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sun.entity.YgfDljSearchRecord">
+    <result column="searchLong" jdbcType="LONGVARCHAR" property="searchlong" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, time, ip, browser, equipment, searchShort, searchLong, ipBelong, resolution, 
-    status, cookie, referer
+    id, time, ip, browser, equipment, searchShort, ipBelong, resolution, status, cookie, 
+    referer, userAgent, phoneNum
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    searchLong
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from ygf_dlj_search_record
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -32,14 +41,14 @@
   <insert id="insert" parameterType="com.sun.entity.YgfDljSearchRecord">
     insert into ygf_dlj_search_record (id, time, ip, 
       browser, equipment, searchShort, 
-      searchLong, ipBelong, resolution, 
-      status, cookie, referer
-      )
+      ipBelong, resolution, status, 
+      cookie, referer, userAgent, 
+      phoneNum, searchLong)
     values (#{id,jdbcType=BIGINT}, #{time,jdbcType=TIMESTAMP}, #{ip,jdbcType=VARCHAR}, 
       #{browser,jdbcType=VARCHAR}, #{equipment,jdbcType=VARCHAR}, #{searchshort,jdbcType=VARCHAR}, 
-      #{searchlong,jdbcType=VARCHAR}, #{ipbelong,jdbcType=VARCHAR}, #{resolution,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{cookie,jdbcType=VARCHAR}, #{referer,jdbcType=VARCHAR}
-      )
+      #{ipbelong,jdbcType=VARCHAR}, #{resolution,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{cookie,jdbcType=VARCHAR}, #{referer,jdbcType=VARCHAR}, #{useragent,jdbcType=VARCHAR}, 
+      #{phonenum,jdbcType=VARCHAR}, #{searchlong,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sun.entity.YgfDljSearchRecord">
     insert into ygf_dlj_search_record
@@ -62,9 +71,6 @@
       <if test="searchshort != null">
         searchShort,
       </if>
-      <if test="searchlong != null">
-        searchLong,
-      </if>
       <if test="ipbelong != null">
         ipBelong,
       </if>
@@ -79,6 +85,15 @@
       </if>
       <if test="referer != null">
         referer,
+      </if>
+      <if test="useragent != null">
+        userAgent,
+      </if>
+      <if test="phonenum != null">
+        phoneNum,
+      </if>
+      <if test="searchlong != null">
+        searchLong,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -100,9 +115,6 @@
       <if test="searchshort != null">
         #{searchshort,jdbcType=VARCHAR},
       </if>
-      <if test="searchlong != null">
-        #{searchlong,jdbcType=VARCHAR},
-      </if>
       <if test="ipbelong != null">
         #{ipbelong,jdbcType=VARCHAR},
       </if>
@@ -117,6 +129,15 @@
       </if>
       <if test="referer != null">
         #{referer,jdbcType=VARCHAR},
+      </if>
+      <if test="useragent != null">
+        #{useragent,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null">
+        #{phonenum,jdbcType=VARCHAR},
+      </if>
+      <if test="searchlong != null">
+        #{searchlong,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -138,9 +159,6 @@
       <if test="searchshort != null">
         searchShort = #{searchshort,jdbcType=VARCHAR},
       </if>
-      <if test="searchlong != null">
-        searchLong = #{searchlong,jdbcType=VARCHAR},
-      </if>
       <if test="ipbelong != null">
         ipBelong = #{ipbelong,jdbcType=VARCHAR},
       </if>
@@ -156,7 +174,33 @@
       <if test="referer != null">
         referer = #{referer,jdbcType=VARCHAR},
       </if>
+      <if test="useragent != null">
+        userAgent = #{useragent,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null">
+        phoneNum = #{phonenum,jdbcType=VARCHAR},
+      </if>
+      <if test="searchlong != null">
+        searchLong = #{searchlong,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sun.entity.YgfDljSearchRecord">
+    update ygf_dlj_search_record
+    set time = #{time,jdbcType=TIMESTAMP},
+      ip = #{ip,jdbcType=VARCHAR},
+      browser = #{browser,jdbcType=VARCHAR},
+      equipment = #{equipment,jdbcType=VARCHAR},
+      searchShort = #{searchshort,jdbcType=VARCHAR},
+      ipBelong = #{ipbelong,jdbcType=VARCHAR},
+      resolution = #{resolution,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      cookie = #{cookie,jdbcType=VARCHAR},
+      referer = #{referer,jdbcType=VARCHAR},
+      userAgent = #{useragent,jdbcType=VARCHAR},
+      phoneNum = #{phonenum,jdbcType=VARCHAR},
+      searchLong = #{searchlong,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sun.entity.YgfDljSearchRecord">
@@ -166,12 +210,13 @@
       browser = #{browser,jdbcType=VARCHAR},
       equipment = #{equipment,jdbcType=VARCHAR},
       searchShort = #{searchshort,jdbcType=VARCHAR},
-      searchLong = #{searchlong,jdbcType=VARCHAR},
       ipBelong = #{ipbelong,jdbcType=VARCHAR},
       resolution = #{resolution,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       cookie = #{cookie,jdbcType=VARCHAR},
-      referer = #{referer,jdbcType=VARCHAR}
+      referer = #{referer,jdbcType=VARCHAR},
+      userAgent = #{useragent,jdbcType=VARCHAR},
+      phoneNum = #{phonenum,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -1,0 +1,96 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+html,body{
+    background: rgba(242, 242, 242, 1);
+}
+.flow-indicator-wrapper{
+    position: relative;
+}
+.flow-indicator-wrapper .data_time{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+.flow-indicator-wrapper .data_time button{
+    background: #ffffff;
+    padding: 0 5px;
+    border-radius: 5px;
+    border: 1px solid #333333;
+    box-sizing: border-box;
+}
+.flow-indicator-wrapper h2{
+    text-align: center;
+}
+.row-box{
+    padding: 0 30px;
+}
+.row-box .col-top{
+    text-align: center;
+    padding: 5px 5px;
+}
+.col-top div{
+    background: #fff;
+    padding: 10px 0;
+}
+.col-top div .col-top-tit{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+.col-top div .value{
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+.row-box .col-md-6{
+    padding: 0 5px;
+    position: relative;
+}
+.row-box .col-md-6 .echarts,.row-box .col-md-12 .echarts{
+    background: #ffffff;
+}
+.row-box .col-md-6 #PV,.row-box .col-md-6 #UV,.row-box .col-md-6 #traffic_Source,.row-box .col-md-6 #Access_terminal,.row-box .col-md-6 #OrderCircular
+,.row-box .col-md-6 #orderSource, .row-box .col-md-6 #orderConversion, .row-box .col-md-6 #orderCancellation,.row-box .col-md-6 #orderRefund,
+.row-box .col-md-6 #salesVolume,.row-box .col-md-6 #unit,.row-box .col-md-6 #active_members,.row-box .col-md-6 #new_members,.row-box .col-md-6 #Re_purchase
+,.row-box .col-md-6 #back_buy{
+    width: 100%;
+    height: 400px;
+    margin-top: 10px;
+}
+#sales_rankings,#sales_charts{
+    width: 100%;
+    height: 400px;
+}
+.row-box .col-md-12{
+    margin-top: 10px;
+    padding: 0;
+}
+.showValue{
+    position: absolute;
+    z-index: 10;
+    right: 60px;
+    top: 15px;
+}
+.col-md-6 .showValue .showUl{
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 12px;
+}
+.col-md-6 .showValue .showUl li{
+    list-style: none;
+    display: inline-block;
+    margin-right: 10px;
+}
+.select{
+    border: 1px solid;
+    font-size: 12px;
+    line-height: 20px;
+    height: 20px;
+    width: 50px;
+}
+.xsBox{
+    position: relative;
+}

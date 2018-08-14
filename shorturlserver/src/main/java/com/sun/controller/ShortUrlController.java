@@ -18,6 +18,8 @@ package com.sun.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -26,20 +28,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import com.alibaba.fastjson.JSONObject;
 import com.sun.entity.YgfLongShortLink;
 import com.sun.service.ShortUrlService;
+import com.sun.service.data.ResultEntity;
 import com.sun.util.Const;
 import com.sun.util.Util;
 
 @RestController
+@CrossOrigin
 public class ShortUrlController {
 	/***
 	 * 请求重定向
@@ -50,12 +55,20 @@ public class ShortUrlController {
 	 */
 	@Resource
 	private ShortUrlService shortUrlService;
-	
+	/**
+	 * 请求转发
+	 * @param shortUrl 短链
+	 * @param httpRequest
+	 * @param webRequest
+	 * @param httpResponse
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@RequestMapping("/{shortUrl}")
 	public void shortToLongUrl(@PathVariable("shortUrl") String shortUrl, HttpServletRequest httpRequest,
 			WebRequest webRequest,HttpServletResponse httpResponse) throws ServletException, IOException {
 
-		String remoteAddr = httpRequest.getRemoteAddr();//ip
+		String remoteAddr = Util.getRemoteHost(httpRequest);//ip
 		String userAgent = webRequest.getHeader(HttpHeaders.USER_AGENT);//请求头
 		String referer = webRequest.getHeader(HttpHeaders.REFERER);
 //		String remoteHost = httpRequest.getRemoteHost();//ip
@@ -79,7 +92,7 @@ public class ShortUrlController {
 					cookieString = c;
 				}
 				shortUrlService.insertRecord(remoteAddr,userAgent,shortUrl,null,cookieString,referer);
-				httpResponse.sendRedirect(Util.isEmpty(userAgent)?Const.ygfIndex:url);//没有请求头的过滤
+				httpResponse.sendRedirect(Util.isEmpty(userAgent)?Const.ygfIndex:url.replaceAll("(&|.?)ygfPhoneNum=[0-9]*", ""));//没有请求头的过滤
 			}
 		}
 	}
@@ -90,18 +103,42 @@ public class ShortUrlController {
 	 * @return
 	 */
 	@GetMapping("/saveSU")
-	public JSONObject longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest) {
-		JSONObject json = new JSONObject();
-		System.out.println(longUrl);
+	public String longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest) {
+		ResultEntity result = new ResultEntity();
+		Map<String, String> map = new HashMap<String,String>();
 		if (longUrl==""||longUrl==null) {
-			json.put("result", "fasle");
-			json.put("des", "参数错误");
-			return json;
+			result.setResult(Const.result_fail);
+			result.setDesc("参数错误");
+			return "success";
 		}else {
 			YgfLongShortLink ygfLongShortLink = shortUrlService.insertShortLink(longUrl);
-			json.put("shortUrl", httpRequest.getRequestURL().toString().replace(httpRequest.getServletPath(),"/")+ygfLongShortLink.getShortlink());
-			json.put("result", "success");
-			return json;
+			result.setResult(Const.result_success);
+			map.put("shortUrl", httpRequest.getRequestURL().toString().replace(httpRequest.getServletPath(),"/")+ygfLongShortLink.getShortlink());
+			map.put("longUrl", longUrl);
+			result.setData(map);
+			return "success";
+		}
+	}
+	/**
+	 * 	获得长链接
+	 * @param shortUrl 短链接
+	 * @param httpRequest
+	 * @return
+	 */
+	@GetMapping("/getLongUrl")
+	public ResultEntity getLongUrl(@RequestParam(required = true) String shortUrl) {
+		ResultEntity result = new ResultEntity();
+		if (shortUrl==""||shortUrl==null) {
+			result.setResult(Const.result_fail);
+			result.setDesc("参数错误");
+			return result;
+		}else {
+			String longUrl = shortUrlService.getLongUrl(shortUrl);
+			Map<String, String> map = new HashMap<String,String>();
+			result.setResult(Const.result_success);
+			map.put("longUrl", longUrl);
+			result.setData(map);
+			return result;
 		}
 	}
 }

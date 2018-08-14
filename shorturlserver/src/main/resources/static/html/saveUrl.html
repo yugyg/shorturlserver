@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>保存短链接</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <style>
+        .container {
+            margin-top:80px;
+            background-color: #edf0f4;
+            padding-bottom:80px;
+        }
+        .bg-olive {
+            background-color: #05b284;
+            color:#fff;
+            transition: background-color .5s
+        }
+        .bg-olive:hover{
+            background-color: #058f6a;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="content">
+            <form action="/saveSU">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4" style="margin-top:176px; border: 1px solid rgba(150,150,150,0.29); padding:8px; border-radius: 3px;">
+                        <input type="text" name="longUrl" class="form-control input-lg col-md-4" placeholder="请输入要压缩的网址" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="width:124px; height:46px; margin:20px auto 0 auto">
+                        <input type="submit" value="获取短网址" class="btn btn-lg bg-olive" >
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

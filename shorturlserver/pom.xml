@@ -60,4 +60,78 @@
 			<version>1.3.1</version>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<resources>
+			<resource>
+				<!-- 指定resources插件处理哪个目录下的资源文件 -->
+				<directory>${basedir}/src/main/webapp</directory>
+				<!--注意此次必须要放在此目录下才能被访问到-->
+				<targetPath>META-INF/resources</targetPath>
+				<includes>
+					<include>**/**</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/**</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/**.xml</include>
+				</includes>
+			</resource>
+		</resources>
+  		<plugins>
+			
+	  		<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>appassembler-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+					</execution>
+				</executions>
+	
+				<configuration>
+					<!-- lib下直接存放jar，没有路径文件夹（如com/apache)，如果没有这个选项则放在lib下的jar包会被com/apache类似的多层文件夹包裹起来 -->
+					<repositoryLayout>flat</repositoryLayout>
+					<configurationDirectory>conf</configurationDirectory>
+					<configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+					<copyConfigurationDirectory>true</copyConfigurationDirectory>
+					<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+					<!-- 生成的项目的目录位置，这里的client是项目的名称，你可以根据你的需要自己随便命名 -->
+					<assembleDirectory>${project.build.directory}/client</assembleDirectory>
+					<!-- java启动参数 -->
+					<extraJvmArguments>-Xms128m</extraJvmArguments>
+					<binFileExtensions>
+						<unix>.sh</unix>
+					</binFileExtensions>
+					<platforms>
+						<platform>windows</platform>
+						<platform>unix</platform>
+					</platforms>
+					<repositoryName>lib</repositoryName>
+					<programs>
+						<program>
+							<!-- 指定主类，脚本名。会生成shell/bat两种类型,也可用platforms指定运行平台 -->
+							<mainClass>com.yugyg.shorturlserver.SpringBootApplicationStart</mainClass>
+							<!-- 生成的脚本文件的名称，比如start.sh,你也可以根据你的需要命名成其他名字 -->
+							<name>start</name>
+						</program>
+					</programs>
+				</configuration>
+			</plugin>
+	  	</plugins>
+  	</build>
+	
 </project>

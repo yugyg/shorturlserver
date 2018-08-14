@@ -2,6 +2,8 @@ package com.sun.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.sun.entity.YgfDljSearchRecord;
 import com.sun.entity.YgfLongShortLink;
+import com.sun.entity.YgfProvince;
 import com.sun.exmapper.YgfDljExMapper;
 import com.sun.mapper.YgfDljSearchRecordMapper;
 import com.sun.mapper.YgfLongShortLinkMapper;
+import com.sun.mapper.YgfProvinceMapper;
 import com.sun.service.ShortUrlService;
 import com.sun.service.data.IPData;
 import com.sun.service.data.PieData;
@@ -74,10 +78,18 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 		ygfDljSearchRecord.setCookie(cookie);
 		ygfDljSearchRecord.setStatus(Util.isEmpty(userAgent)?1:0);
 		ygfDljSearchRecord.setReferer(Util.isEmpty(referer)?"直接访问":referer);
+		ygfDljSearchRecord.setUseragent(userAgent);
 		YgfLongShortLink link = ygfDljExMapper.selectShortLink(searchShort);
-		ygfDljSearchRecord.setSearchlong(link == null?"no long link":link.getLonglink());
+		String lu = link == null?"no long link":link.getLonglink();//.replaceAll("(&|.?)phoneNum=[0-9]*", ""
+		Pattern pattern = Pattern.compile("(&|.?)ygfPhoneNum=[0-9]*");//匹配手机号
+		Matcher matcher = pattern.matcher(lu);
+		while (matcher.find()) {
+			ygfDljSearchRecord.setPhonenum(matcher.group().substring(13));
+		}
+		ygfDljSearchRecord.setSearchlong(lu.replaceAll("(&|.?)ygfPhoneNum=[0-9]*", ""));
 		String s = HttpUtil.getInstance().httpExecute(Const.aliIpSearch+ip);
-		JSONObject data = JSONObject.parseObject(s).getJSONObject("data");
+		JSONObject obj = JSONObject.parseObject(s);
+		JSONObject data = obj==null?null:obj.getJSONObject("data");
 		//中国-江苏-无锡-电信
 		if (data!=null) {
 			ygfDljSearchRecord.setIpbelong(data.getString("country")+"-"+data.getString("region")+"-"+data.getString("city")+"-"+data.getString("isp"));
@@ -148,5 +160,9 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 	@Override
 	public Integer selectAllRecordCount(SearchData searchData) {
 		return ygfDljExMapper.selectAllRecordCount(searchData);
+	}
+	@Override
+	public List<YgfProvince> getAllProvince() {
+		return ygfDljExMapper.getAllProvince();
 	}
 }

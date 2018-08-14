@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <style>
+        body {
+            background-color: #edf0f4;
+            }
+            .main-header .navbar {
+            background-color: #1997d6;
+            }
+            .main-header .navbar a {
+            color: #fff;
+            background-color: #1997d6;
+            }
+            .main-header .navbar li.active a {
+            background: rgba(0, 0, 0, 0.1);
+            color: #f6f6f6;
+            }
+            .main-header .navbar a:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #f6f6f6;
+            }
+            .navbar-toggle {
+            color: #fff;
+            }
+            .box {
+            position: relative;
+            border-radius: 3px;
+            background: #ffffff;
+            border-top: 3px solid #d6d9e1;
+            margin-bottom: 20px;
+            width: 100%;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            }
+            .box.box-success {
+            border-top-color: #06d6a0;
+            }
+            .box-header.with-border {
+            border-bottom: 1px solid #f4f4f4;
+            }
+            .box-header {
+            color: #444;
+            display: block;
+            padding: 10px;
+            position: relative;
+            }
+            .box-header .box-title {
+            display: inline-block;
+            font-size: 18px;
+            margin: 0;
+            line-height: 1;
+            }
+            .box-body {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 3px;
+            border-bottom-left-radius: 3px;
+            padding: 10px;
+            }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" rel="home" href="/" title="愚公坊">
+                        <!-- <img style="max-width:100px; margin-top: -5px;" src="//cdn.link-hub.cn/0x3.me/static/image/logo-cartoon-3.png"> -->
+                        愚公坊
+                    </a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li id="nav-index">
+                            <a href="#">首页</a>
+                        </li>
+                        <li id="nav-portal" class="active">
+                            <a href="#">用户中心</a>
+                        </li>
+                        <li id="nav-demo">
+                            <a href="#" style="font-weight: bold;">统计报表</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <!-- 短网址生成结果 -->
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">短网址生成完毕</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="input-group input-group-lg">
+                                <input type="text" id="short_url_input" class="form-control" value="https://0x9.me/LPgUh">
+                                <span class="input-group-btn">
+                                    <button id="cpbtn" type="button" class="btn btn-info" data-clipboard-target="#short_url_input">复制
+                                    </button>
+                                </span>
+                            </div>
+                            <blockquote style="margin-top: 10px; word-break: break-all; word-wrap: break-word;">
+                                <footer>原网址:https://0x3.me/info/demo?from=slink</footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 继续添加 -->
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">继续添加</h3>
+                        </div>
+                        <div class="box-body">
+                            <form method="post" action="">
+                                <div class="input-group input-group-lg">
+                                    <input type="text" name="url" autocomplete="off" class="form-control" value="" placeholder="请输入要压缩的网址">
+                                    <!-- <input type="hidden" name="__HASH__" value="B3A1437C-6CA89498-41B25EBA-02769CE3"> -->
+                                    <span class="input-group-btn">
+                                        <button id="getnew" type="submit" class="btn btn-success">
+                                            获取短网址
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+<script src="../js/jquery-1.11.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('#cpbtn');
+    clipboard.on('success', function(e) {
+        $("#cpbtn").text("复制成功");
+        // console.info('Action:', e.action);
+        // console.info('Text:', e.text);
+        // console.info('Trigger:', e.trigger);
+
+        e.clearSelection();
+    });
+</script>
+</body>
+
+</html>

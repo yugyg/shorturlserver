@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.sun.entity.YgfCity;
 import com.sun.entity.YgfDljSearchRecord;
 import com.sun.entity.YgfLongShortLink;
+import com.sun.entity.YgfProvince;
 import com.sun.service.data.IPData;
 import com.sun.service.data.PieData;
 import com.sun.service.data.PublicResults;
@@ -106,5 +108,15 @@ public interface YgfDljExMapper {
 	 * @return
 	 */
 	List<PieData> selectCity(SearchData searchData);
-	
+	/**
+	 * 获得所有省份
+	 * @param searchData
+	 * @return
+	 */
+	List<YgfProvince> getAllProvince();
+	/**
+	 * 获得所有市
+	 * @return
+	 */
+	List<YgfCity> getAllCity();
 }

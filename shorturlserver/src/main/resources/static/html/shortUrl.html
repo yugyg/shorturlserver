@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>短链接</title>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap-daterangepicker/2.1.25/daterangepicker.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/select.css">
+    <link rel="stylesheet" href="../css/shortUrl.css">
+</head>
+<body>
+<div class="shortUrl_wrapper">
+    <h2>短网址分析报表</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="info-box b1grey">
+                    <span class="info-box-icon bg-aqua">
+                        <i class="fa fa-link"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">短网址</span>
+                        <p class="shortUrl">
+                            http://yugyg.com
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box b1grey">
+                    <span class="info-box-icon bg-green">
+                        <i class="fa fa-star-o"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">总访问量</span>
+                        <p class="number_value total_val">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box b1grey">
+                    <span class="info-box-icon bg-yellow">
+                        <i class="fa fa-cubes"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">IP数</span>
+                        <p class="number_value ip_val">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box b1grey">
+                    <span class="info-box-icon bg-red">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">独立用户(UV)数</span>
+                        <p class="number_value uv_val">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--7天内的访问统计A-->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">7天内的访问统计</h3>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="week-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--box-内容-->
+            <div class="box-body">
+                <div class="row">
+                    <!--左边时间选择-->
+                    <div class="col-md-3">
+                        <div class="btn-group special">
+                            <button type="button" data-type="week-summary" data-day="today" class="btn btn-flat btn-default active">今天</button>
+                            <button type="button" data-type="week-summary" data-day="yesterday" class="btn btn-flat btn-default">昨天</button>
+                            <button type="button" data-type="week-summary" data-day="sevenDay" class="btn btn-flat btn-default">7天</button>
+                        </div>
+                        <ul class="nav nav-pills nav-stacked">
+                            <li>
+                                <a href="#" class="text-center ptb35">
+                                    <span class="text-green fs40" id="week-summary-total"></span>
+                                    <br>
+                                    <span>访问量</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-center ptb35">
+                                    <span class="text-yellow fs40" id="week-summary-ip"></span>
+                                    <br>
+                                    <span>IP数</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="text-center ptb35">
+                                    <span class="text-red fs40" id="week-summary-uv"></span>
+                                    <br>
+                                    <span>UV数</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--右边图表展示-->
+                    <div class="col-md-9 h600 no-padding">
+                        <div id="sevenDay_tj" style="height: 600px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--24小时内的访问统计B-->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">24小时内访问统计</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="day-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--box-内容-->
+            <div class="box-body">
+                <div class="row">
+                    <!--右边图表展示-->
+                    <div class="col-md-12 h600 no-padding">
+                        <div id="twenty-fourHours" style="height: 600px;width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--访问者设备系统分析C-->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">访问者设备系统分析</h3>
+                        <span class="smart_filter" data-type="C">
+                            <i class="fa fa-plus"></i>设置筛选条件
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="os-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--box-内容-->
+            <div class="box-body">
+                <div class="row">
+                    <!--左边图表展示-->
+                    <div class="col-md-8 h450">
+                        <div id="OS" style="height:450px"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-center">
+                            <strong>设备系统TOP5</strong>
+                        </h4>
+                      	<div id="user-device"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--访问者浏览器统计D-->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">访问者浏览器统计</h3>
+                        <span class="smart_filter" data-type="D">
+                            <i class="fa fa-plus"></i>设置筛选条件
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="browser-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--box-内容-->
+            <div class="box-body">
+                <div class="row">
+                    <!--左边图表展示-->
+                    <div class="col-md-12 h600">
+                        <div id="browser" style="height:600px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--国内访问地区统计E-->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">国内访问地区统计</h3>
+                        <span class="smart_filter" data-type="E">
+                            <i class="fa fa-plus"></i>设置筛选条件
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="china-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--box-内容-->
+            <div class="box-body">
+                <div class="row">
+                    <!--左边图表展示-->
+                    <div class="col-md-4 h600">
+                        <div id="province" style="height:600px"></div>
+                    </div>
+                    <!--右边图表展示-->
+                    <div class="col-md-8 h600">
+                        <div id="china" style="height:600px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--网络供应商统计F-->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">网络供应商统计</h3>
+                        <span class="smart_filter" data-type="F">
+                            <i class="fa fa-plus"></i>设置筛选条件
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="isp-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--box-内容-->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12 h600">
+                        <div id="isp" style="height:600px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="callout callout-info">
+            <p>
+                当跳转状态为“过滤”时，此访客发出的网页浏览行为属于NHT（Non Human Traffic，非人类的访问），可能是各种功能的机器人：搜索爬虫、内容采集器、舆情监控、网站性能监控、压力测试器、自动发帖机、安全检测软件等等，一般无视即可
+            </p>
+        </div>
+        <!-- 访问记录明细 -->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">访问记录明细</h3>
+                        <span class="smart_filter">
+                            <i class="fa fa-plus"></i>设置筛选条件
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="log-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--table内容区-->
+            <div class="box-body no-padding table-responsive" id="logs-area">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <th style="min-width:150px;">时间</th>
+                    <th>设备</th>
+                    <th>浏览器</th>
+                    <th>IP</th>
+                    <th>IP归属地</th>
+                    <th>访问来源</th>
+                    <th>跳转状态</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <!--分页-->
+            <div class="box-footer" id="logs-pager">
+                <!-- <ul class="pagination pagination-sm no-margin pull-right">
+                    <li>
+                        <a href="#" class="bg-olive">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#">...</a>
+                    </li>
+                    <li>
+                        <a href="#">下一页</a>
+                    </li>
+                </ul> -->
+                <div class="pagination pagination-sm no-margin pull-right">
+                    <ul id="pageLimit"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="callout callout-success">
+            <p>一般一个ip访问次数在1到2次之间,超过这个值则不正常(联通/电信 3G/4G省级共享出口除外),本页按照每个ip访问次数降序排列(仅显示TOP50)</p>
+        </div>
+        <!-- 高频访问IP名单 -->
+        <div class="box">
+            <!--box-头部-->
+            <div class="box-header with-border">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="box-title">高频访问IP名单</h3>
+                        <span class="smart_filter">
+                            <i class="fa fa-plus"></i>设置筛选条件
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm date_choose">
+                            <input type="text" class="form-control" id="ip-calender" value="" autocomplete="off" readonly>
+                            <span class="input-group-addon" data-trigger-click="week-calender">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-1 hidden-xs">
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--table内容区-->
+            <div class="box-body no-padding table-responsive" id="ip-rank">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <th>IP地址</th>
+                    <th>归属地</th>
+                    <th>次数</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--智能筛选器Modal-->
+<div class="modal fade in" data-type="" id="smart_filter_modal" style="display: none">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">设置筛选条件</h4>
+            </div>
+            <div class="modal-body" id="smart_filter_modal_body">
+                <div class="row filter_tpl">
+                    <div class="col-md-3">
+                        <label>
+                            <i class="fa fa-apple"></i>设备系统
+                        </label>
+                    </div>
+                    <div class="col-md-9">
+                        <select class="selectpicker equipment" style="width: 100%;">
+                            <option value="noChoose">不选择</option>
+                            <option value="Android">Android</option>
+                            <option value="iPhone">iPhone</option>
+                            <option value="iPad">iPad</option>
+                            <option value="Windows">Windows</option>
+                            <option value="Linux">Linux</option>
+                            <option value="unknown">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row filter_tpl">
+                    <div class="col-md-3">
+                        <label>
+                            <i class="fa fa-chrome"></i>浏览器
+                        </label>
+                    </div>
+                    <div class="col-md-9">
+                        <select class="selectpicker browser" style="width: 100%;">
+                            <option value="noChoose">不选择</option>
+                            <option value="MetaSr">搜狗浏览器</option>
+                            <option value="SogouMobileBrowser">搜狗手机浏览器</option>
+                            <option value="UCBrowser">UC浏览器</option>
+                            <option value="UCWEB">UC手机浏览器</option>
+                            <option value="Opera">Opera浏览器</option>
+                            <option value="QQBrowser">QQ浏览器</option>
+                            <option value="TencentTraveler">QQ手机浏览器</option>
+                            <option value="360SE">360浏览器</option>
+                            <option value="The world">世界之窗浏览器</option>
+                            <option value="Maxthon">遨游浏览器</option>
+                            <option value="MicroMessenger">微信浏览器</option>
+                            <option value="Chrome">谷歌浏览器</option>
+                            <option value="unknown">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row filter_tpl">
+                    <div class="col-md-3">
+                        <label>
+                            <i class="fa fa-map-marker"></i>访客省份
+                        </label>
+                    </div>
+                    <div class="col-md-9">
+                        <select class="selectpicker" style="width: 100%;">
+                            <option value="noChoose">不选择</option>
+                            <option value="1">广东省</option>
+                            <option value="2">广西省</option>
+                            <option value="3">福建省</option>
+                            <option value="4">湖南省</option>
+                            <option value="5">山东省</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row filter_tpl">
+                    <div class="col-md-3">
+                        <label>
+                            <i class="fa fa-wifi"></i>网络供应商
+                        </label>
+                    </div>
+                    <div class="col-md-9">
+                        <select class="selectpicker inter" style="width: 100%;">
+                            <option value="noChoose">不选择</option>
+                            <option value="电信">电信</option>
+                            <option value="移动">移动</option>
+                            <option value="联通">联通</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row filter_tpl">
+                    <div class="col-md-3">
+                        <label>
+                            <i class="fa fa-filter"></i>跳转状态
+                        </label>
+                    </div>
+                    <div class="col-md-9">
+                        <select class="selectpicker status" style="width: 100%;">
+                            <option value="noChoose">不选择</option>
+                            <option value="0">成功</option>
+                            <option value="1">失败</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-success send" id="smart_filter_modal_btn">设置</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../js/jquery-1.11.1.js"></script>
+<script src="../js/bootstrap.js"></script>
+<script src="../js/select.js"></script>
+<script src="../js/bootstrap-paginator.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap-daterangepicker/2.1.25/moment.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap-daterangepicker/2.1.25/daterangepicker.js"></script>
+<script src="../js/echarts.js"></script>
+<!--<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>-->
+<script src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script src="../js/public_shortUrl.js"></script>
+<script src="../js/echarts.shortUrl.js"></script>
+<script src="../js/shortUrl_date.js"></script>
+</body>
+</html>

@@ -14,6 +14,8 @@ public class SearchData {
 	private String groupColumn;
 	/**短链接*/
 	private String shortUrl;
+	/**长链接*/
+	private String longUrl;
 	/**浏览器*/
 	private String browser;
 	/**设备*/
@@ -94,5 +96,11 @@ public class SearchData {
 	}
 	public void setStartIndex(Integer startIndex) {
 		this.startIndex = startIndex;
+	}
+	public String getLongUrl() {
+		return longUrl;
+	}
+	public void setLongUrl(String longUrl) {
+		this.longUrl = longUrl;
 	}
 }
