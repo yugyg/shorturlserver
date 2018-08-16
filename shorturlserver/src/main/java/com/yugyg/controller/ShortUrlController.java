@@ -19,6 +19,7 @@ package com.yugyg.controller;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -28,22 +29,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import com.yugyg.entity.YgfLongShortLink;
+import com.yugyg.entity.YgfProvince;
 import com.yugyg.service.ShortUrlService;
 import com.yugyg.service.data.ResultEntity;
 import com.yugyg.util.Const;
 import com.yugyg.util.Util;
 
-@RestController
+@Controller
 @CrossOrigin
 public class ShortUrlController {
 	/***
@@ -75,27 +77,46 @@ public class ShortUrlController {
 //		String host = webRequest.getHeader(HttpHeaders.HOST);
 //		String server = webRequest.getHeader(HttpHeaders.SERVER);
 		//通过淘宝IP获取地址
-		if (shortUrl == null || shortUrl == "") {
+		String c = Util.getCookieByName(httpRequest, "sus");
+		String cookieString = "";
+		if(Util.isEmpty(c)){
+			cookieString = Util.dateFormat(new Date(), Const.cookieFormate)+"-"+remoteAddr;
+			Cookie cookie = new Cookie("sus",cookieString);
+			httpResponse.addCookie(cookie);
+		}else {
+			cookieString = c;
+		}
+		new Thread(new InsertRecordThread(remoteAddr,userAgent,shortUrl,cookieString,referer)).start();
+		if (shortUrl == null || shortUrl == ""|| userAgent == "") {
 			httpResponse.sendRedirect(Const.ygfIndex);
 		}else {
 			String url = shortUrlService.getLongUrl(shortUrl);
 			if (url == null || url == "") {
 				httpResponse.sendRedirect(Const.ygfIndex);
 			}else {
-				String c = Util.getCookieByName(httpRequest, "sus");
-				String cookieString = "";
-				if(Util.isEmpty(c)){
-					cookieString = Util.dateFormat(new Date(), Const.cookieFormate)+"-"+remoteAddr;
-					Cookie cookie = new Cookie("sus",cookieString);
-					httpResponse.addCookie(cookie);
-				}else {
-					cookieString = c;
-				}
-				shortUrlService.insertRecord(remoteAddr,userAgent,shortUrl,null,cookieString,referer);
 				httpResponse.sendRedirect(Util.isEmpty(userAgent)?Const.ygfIndex:url.replaceAll("(&|.?)ygfPhoneNum=[0-9]*", ""));//没有请求头的过滤
 			}
 		}
 	}
+	//线程类                       
+	public class InsertRecordThread implements Runnable {
+		private String remoteAddr;
+        private String userAgent;
+        private String shortUrl;
+        private String cookieString;
+        private String referer;
+		public InsertRecordThread(String remoteAddr,String userAgent,String shortUrl,String cookieString,String referer) {
+			this.remoteAddr = remoteAddr;
+            this.userAgent = userAgent;
+            this.shortUrl = shortUrl;
+            this.cookieString = cookieString;
+            this.referer = referer;
+		}
+		//null分辨率
+        public void run() {
+        	shortUrlService.insertRecord(remoteAddr,userAgent,shortUrl,null,cookieString,referer);
+        } 
+    }
 	/**
 	 * 转换和保存长链接
 	 * @param longUrl
@@ -140,5 +161,22 @@ public class ShortUrlController {
 			result.setData(map);
 			return result;
 		}
+	}
+	/**
+	 * 	获得省份
+	 * @param shortUrl 短链接
+	 * @param httpRequest
+	 * @return
+	 */
+	@PostMapping("/getProvinces")
+	public List<YgfProvince> getProvinces() {
+		return shortUrlService.getAllProvince();
+	}
+	@RequestMapping("/")
+	public String index() {
+		return "redirect:/html/saveUrl.html";
+	}
+	public static void main(String[] args) {
+		System.out.println(Util.getIpBelong("218.205.17.168"));
 	}
 }

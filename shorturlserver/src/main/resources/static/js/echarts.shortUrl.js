@@ -6,16 +6,7 @@ var chinese = ["江苏","北京","湖南","内蒙古","吉林","宁夏","广东"
 var phonetic =["jiangsu","beijing","hunan","neimenggu","jilin","ningxia","guangdong","liaoning","qinghai","hubei","shanxi",
 				"gansu","henan","hebei","shanxi3","shandong","tianjin","xizang","jiangxi","yunnan","fujian","guizhou","anhui",
 				"taiwan","sichuan","zhejiang","aomeng","chongqing","shanghai","xianggang","hainan","heilongjiang","xinjiang","guangxi"]
-
-    // 顶部的数据
-    url="http://192.168.0.55:8901/data";
-    //url="http://spring.yugyg.com:8901/data";
-    $.post(url,{shortUrl:"qAjiMr",witch:""},function (data) {
-        var topThree=data.data.topThree;
-        $(".total_val").html(topThree.total);
-        $(".ip_val").html(topThree.ip);
-        $(".uv_val").html(topThree.uv);
-    });
+    url="/data";
     //7天内的访问统计
     //基于准备好的dom，初始化echarts实例
     var myChartSevenDay_tj = echarts.init(document.getElementById('sevenDay_tj'));
@@ -86,177 +77,76 @@ var phonetic =["jiangsu","beijing","hunan","neimenggu","jilin","ningxia","guangd
     };
     // 使用刚指定的配置项和数据显示图表。
     //myChartSevenDay_tj.setOption(optionSevenDay);
-    comment(url,{shortUrl:"qAjiMr",witch:"A"},optionSevenDay,myChartSevenDay_tj,"A");
+//    comment(url,{shortUrl:myShort,witch:"A"},optionSevenDay,myChartSevenDay_tj,"A");
 
 
     //24小时的访问统计
     //基于准备好的dom，初始化echarts实例
     var myChartTwentyFourHours = echarts.init(document.getElementById('twenty-fourHours'));
     // 指定图表的配置项和数据
-    var optionTwentyFourHours = {
-        backgroundColor: new echarts.graphic.RadialGradient(0, 0, 0, [{
-            offset: 0,
-            color: '#f7f8fa'
-        }, {
-            offset: 1,
-            color: '#cdd0d5'
-        }]),
-        legend: {
-            data: ['总量', '独立用户（UV）','有效跳转','无效跳转']
-        },
-        tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
-            }
-        },
-        xAxis: {
-            type : 'category',
-            axisTick: {
-                alignWithLabel: true
-            },
-            axisLabel:{
-                interval:2,//横轴信息全部显示
-            },
-            splitLine: {
-                lineStyle: {
-                    type: 'dashed'
-                }
-            }
-        },
-        yAxis: {
-            splitLine: {
-                lineStyle: {
-                    type: 'dashed'
+    var optionTwentyFourHours =  {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                 }
             },
-            scale: true
-        },
-        series: [{
-            name: '总量',
-            data: "",
-            type: 'scatter',
-            symbolSize: function (data) {
-                return Math.sqrt(data[2]) / 5e2;
+            legend: {
+                data: ['总量', '独立用户(UV)', '有效跳转', '无效跳转', 'IP数']
             },
-            label: {
-                emphasis: {
-                    show: true,
-                    formatter: function (param) {
-                        return param.data[3];
+            xAxis: {
+                type: 'category',
+                data: "",
+                axisTick: {
+                    alignWithLabel: true
+                           },
+                axisLabel: {
+                    interval: 3,//横轴信息全部显示
+                    rotate: 0,//60度角倾斜显示
+                }
+            },
+            yAxis: {},
+            series: [
+                {
+                    name: '总量',
+                    type: 'line',
+                    data: "",
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
                     },
-                    position: 'top'
-                }
-            },
-            itemStyle: {
-                normal: {
-                    shadowBlur: 10,
-                    shadowColor: 'rgba(120, 36, 50, 0.5)',
-                    shadowOffsetY: 5,
-                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-                        offset: 0,
-                        color: 'rgb(251, 118, 123)'
-                    }, {
-                        offset: 1,
-                        color: 'rgb(204, 46, 72)'
-                    }])
-                }
-            }
-        }, {
-            name: '独立用户（UV）',
-            data: "",
-            type: 'scatter',
-            symbolSize: function (data) {
-                return Math.sqrt(data[2]) / 5e2;
-            },
-            label: {
-                emphasis: {
-                    show: true,
-                    formatter: function (param) {
-                        return param.data[3];
+                },
+                {
+                    name: '独立用户(UV)',
+                    type: 'line',
+                    data: "",
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
                     },
-                    position: 'top'
+                },
+                {
+                    name: '有效跳转',
+                    type: 'bar',
+                    stack: '搜索引擎',
+                    data: ""
+                },
+                {
+                    name: '无效跳转',
+                    stack: '搜索引擎',
+                    type: 'bar',
+                    data: ""
                 }
-            },
-            itemStyle: {
-                normal: {
-                    shadowBlur: 10,
-                    shadowColor: 'rgba(25, 100, 150, 0.5)',
-                    shadowOffsetY: 5,
-                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-                        offset: 0,
-                        color: 'rgb(129, 227, 238)'
-                    }, {
-                        offset: 1,
-                        color: 'rgb(25, 183, 207)'
-                    }])
-                }
-            }
-        },{
-            name: '有效跳转',
-            data: "",
-            type: 'scatter',
-            symbolSize: function (data) {
-                return Math.sqrt(data[2]) / 5e2;
-            },
-            label: {
-                emphasis: {
-                    show: true,
-                    formatter: function (param) {
-                        return param.data[3];
-                    },
-                    position: 'top'
-                }
-            },
-            itemStyle: {
-                normal: {
-                    shadowBlur: 10,
-                    shadowColor: 'rgba(25, 100, 150, 0.5)',
-                    shadowOffsetY: 5,
-                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-                        offset: 0,
-                        color: 'rgb(129, 227, 238)'
-                    }, {
-                        offset: 1,
-                        color: 'rgb(25, 183, 207)'
-                    }])
-                }
-            }
-        },{
-            name: '无效跳转',
-            data: "",
-            type: 'scatter',
-            symbolSize: function (data) {
-                return Math.sqrt(data[2]) / 5e2;
-            },
-            label: {
-                emphasis: {
-                    show: true,
-                    formatter: function (param) {
-                        return param.data[3];
-                    },
-                    position: 'top'
-                }
-            },
-            itemStyle: {
-                normal: {
-                    shadowBlur: 10,
-                    shadowColor: 'rgba(25, 100, 150, 0.5)',
-                    shadowOffsetY: 5,
-                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
-                        offset: 0,
-                        color: 'rgb(129, 227, 238)'
-                    }, {
-                        offset: 1,
-                        color: 'rgb(25, 183, 207)'
-                    }])
-                }
-            }
-        }]
-    };
+            ]
+        };
+;
     // 使用刚指定的配置项和数据显示图表。
     //myChartTwentyFourHours.setOption(optionTwentyFourHours);
-    comment(url,{shortUrl:"qAjiMr",witch:"B"},optionTwentyFourHours,myChartTwentyFourHours,"B");
+//    comment(url,{shortUrl:myShort,witch:"B"},optionTwentyFourHours,myChartTwentyFourHours,"B");
 
     //访问者设备系统分析
     //基于准备好的dom，初始化echarts实例
@@ -290,7 +180,7 @@ var phonetic =["jiangsu","beijing","hunan","neimenggu","jilin","ningxia","guangd
     };
     // 使用刚指定的配置项和数据显示图表。
     //myChartOS.setOption(optionOS);
-    comment(url,{shortUrl:"qAjiMr",witch:"C"},optionOS,myChartOS,"C");
+//    comment(url,{shortUrl:myShort,witch:"C"},optionOS,myChartOS,"C");
 
     //访问者浏览器统计
     //基于准备好的dom，初始化echarts实例
@@ -330,7 +220,7 @@ var phonetic =["jiangsu","beijing","hunan","neimenggu","jilin","ningxia","guangd
     };
     // 使用刚指定的配置项和数据显示图表。
     //myChartBrowser.setOption(optionBrowser);
-    comment(url,{shortUrl:"qAjiMr",witch:"D"},optionBrowser,myChartBrowser,"D");
+//    comment(url,{shortUrl:myShort,witch:"D"},optionBrowser,myChartBrowser,"D");
 
     //国内访问地区统计
     //基于准备好的dom，初始化echarts实例
@@ -421,7 +311,7 @@ var phonetic =["jiangsu","beijing","hunan","neimenggu","jilin","ningxia","guangd
     myChartChina.on('click', function(param) {
     	getCitysMsg(param.name, myChartChina, optionChina)
     });
-    comment(url,{shortUrl:"qAjiMr",witch:"E"},optionChina,myChartChina,"E");
+//    comment(url,{shortUrl:myShort,witch:"E"},optionChina,myChartChina,"E");
 
     //网络供应商统计
     //基于准备好的dom，初始化echarts实例
@@ -461,68 +351,32 @@ var phonetic =["jiangsu","beijing","hunan","neimenggu","jilin","ningxia","guangd
     };
     // 使用刚指定的配置项和数据显示图表。
     //myChartIsp.setOption(optionIsp);
-    comment(url,{shortUrl:"qAjiMr",witch:"F"},optionIsp,myChartIsp,"F");
-
-    // 7天左侧按钮点击请求时间
-    $.post(url,{shortUrl:"qAjiMr",witch:"A"},function (data) {
-        var totalArr=data.data.sevenDaysData.series[0].split(",");
-        var ipArr=data.data.sevenDaysData.series[4].split(",");
-        var uvArr=data.data.sevenDaysData.series[1].split(",");
-        var tt=data.data.tt;
-        $("#week-summary-total").html(totalArr[totalArr.length-1]);
-        $("#week-summary-ip").html(ipArr[ipArr.length-1]);
-        $("#week-summary-uv").html(uvArr[uvArr.length-1]);
-        $('[data-type="week-summary"]').click(function (e) {
-            e.preventDefault();
-            $('[data-type="week-summary"]').removeClass('active');
-            $(this).addClass('active');
-            console.log($(this).data("day"));
-            if($(this).data("day")=="today"){
-                $("#week-summary-total").html(totalArr[totalArr.length-1]);
-                $("#week-summary-ip").html(ipArr[ipArr.length-1]);
-                $("#week-summary-uv").html(uvArr[uvArr.length-1]);
-            }else if($(this).data("day")=="yesterday"){
-                $("#week-summary-total").html(totalArr[totalArr.length-2]);
-                $("#week-summary-ip").html(ipArr[ipArr.length-2]);
-                $("#week-summary-uv").html(uvArr[uvArr.length-2]);
-            }else if($(this).data("day")=="sevenDay"){
-                $("#week-summary-total").html(tt.total);
-                $("#week-summary-ip").html(tt.ip);
-                $("#week-summary-uv").html(tt.uv);
-            }
-        });
+//    comment(url,{shortUrl:myShort,witch:"F"},optionIsp,myChartIsp,"F");
+    
+  //刷新判断是否有本地储存短链接
+    if (!isNull(window.localStorage.getItem("myShortUrl"))){
+        myShort=window.localStorage.getItem("myShortUrl");
+    }else {
+    	localStorage.setItem("myShortUrl","bu6Rfu");
+    	myShort = "bu6Rfu";
+    }
+    comment(url,{shortUrl:myShort,witch:"A"},optionSevenDay,myChartSevenDay_tj,"A");
+    comment(url,{shortUrl:myShort,witch:"B"},optionTwentyFourHours,myChartTwentyFourHours,"B");
+    comment(url,{shortUrl:myShort,witch:"C"},optionOS,myChartOS,"C");
+    comment(url,{shortUrl:myShort,witch:"D"},optionBrowser,myChartBrowser,"D");
+    comment(url,{shortUrl:myShort,witch:"E"},optionChina,myChartChina,"E");
+    comment(url,{shortUrl:myShort,witch:"F"},optionIsp,myChartIsp,"F");
+    log(url,{shortUrl:myShort,witch:"H"});
+    ipAnalyse(url,{shortUrl:myShort,witch:"I"});
+    $.post(url,{shortUrl:myShort,witch:""},function (data) {
+    	var topThree=data.data.topThree;
+    	$(".total_val").html(topThree.total);
+    	$(".ip_val").html(topThree.ip);
+    	$(".uv_val").html(topThree.uv);
     });
-    $(function () {
-    //设置筛选条件
-    $(".smart_filter").click(function () {
-        $("#smart_filter_modal").attr("data-type",$(this).data('type'));
-        $("#smart_filter_modal").show();
-        $("html").addClass("modal-open");
-    });
-    $('[data-dismiss="modal"]').click(function () {
-        $("#smart_filter_modal").hide();
-        $("html").removeClass("modal-open");
-    });
-    //select查询
-
-    $(".send").click(function () {
-        var witchType=$("#smart_filter_modal").attr("data-type");
-        var equipment_val=$(".equipment").find("option:selected").val();
-        var browser_val=$(".browser").find("option:selected").val();
-        var inter_val=$(".inter").find("option:selected").val();
-        var status_val=$(".status").find("option:selected").val();
-        $.ajax({
-            type:'post',
-            url:'http://spring.yugyg.com:8901/data?shortUrl=qAjiMr',
-            data:{witch:witchType,equipment:equipment_val,browser:browser_val,internet:inter_val,status:status_val},
-            dataType: "json",
-            success:function () {
-
-            }
-        })
-    });
-
-});
+    $(".shortUrl_input").val(myShort);
+    ipAnalyse(url,{shortUrl:myShort,witch:"I"});
+    log(url,{shortUrl:myShort,witch:"H"});
 /**
  * 省切换进市
  * @param province 省中文
@@ -546,13 +400,13 @@ function getCitysMsg(province,chart,option){
 					option.series[0].map = p;
 				}
 			});
-			comment(url,{shortUrl:"qAjiMr",witch:"EC",privonce:province},optionChina,myChartChina,"EC");
+			comment(url,{shortUrl:myShort,witch:"EC",privonce:province},optionChina,myChartChina,"EC");
 			return;
 		}
 	}
 	if (!isfind) {
 		option.series[0].map = "china";
-		comment(url,{shortUrl:"qAjiMr",witch:"E"},optionChina,myChartChina,"E");
+		comment(url,{shortUrl:myShort,witch:"E"},optionChina,myChartChina,"E");
 		chart.setOption(option); 
 	}
 }

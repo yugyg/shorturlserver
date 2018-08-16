@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>保存成功</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
     <style>
         body {
             background-color: #edf0f4;
@@ -132,8 +132,7 @@
                             </blockquote>
                             <hr>
                             <p>短网址二维码</p>
-                            <div id="qrcode" style="width:240px;height:240px;margin: 0 auto;">
-                                <img id="qrimage" style="width:230px;height:230px;" src="http://qr.api.cli.im/qr?data=https%253A%252F%252Fcli.im%252F&amp;level=H&amp;transparent=false&amp;bgcolor=%23ffffff&amp;forecolor=%23000000&amp;blockpixel=12&amp;marginblock=1&amp;logourl=&amp;size=280&amp;kid=cliim&amp;key=8a615f67ca33d3cb30e220c8e22e6bb3">
+                            <div id="qrcode" style="width:230px;height:230px;;margin: 0 auto;">
                             </div>
                             <div style="margin: 20px 0">
                                 <a href="https://cli.im/url" target="_blank" class="btn btn-block btn-info">美化二维码（改尺寸、颜色、添加头像Logo等）</a>
@@ -166,10 +165,10 @@
             </div>
 
         </div>
-    <script src="../js/jquery-1.11.1.js"></script>
-	<script src="../js/bootstrap.js"></script>
-	<script src="../js/jquery.qrcode.min.js"></script>
-	<script src="../js/saveUrl.js"></script>
+    <script src="/js/jquery-1.11.1.js"></script>
+	<script src="/js/bootstrap.js"></script>
+	<script src="/js/jquery.qrcode.min.js"></script>
+	<script src="/js/saveUrl.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
     <script>
         // 复制
@@ -184,10 +183,10 @@
         $(function(){
         	var url = window.location.search.replace("?shortUrl=","");
         	$("#short_url_input").val(url.trim())
-        	$("#qrimage").qrcode({
+        	$("#qrcode").qrcode({
 				render: "canvas", //table方式
-				width: 112, //宽度
-				height:112, //高度
+				width: 230, //宽度
+				height:230, //高度
 				text: url.trim() //任意内容
 			});
             $.ajax({

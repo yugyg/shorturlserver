@@ -1,8 +1,8 @@
-$(function () {
+
     var beginTimeStore = '';
     var endTimeStore = '';
     var beginTimeTake;
-    var url="http://192.168.0.55:8901/data";
+    var url="/data";
     // 7天时间
     $('#week-calender').daterangepicker({
         "timePicker": false,
@@ -35,7 +35,7 @@ $(function () {
             this.element.val('');
         }else{
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            comment(url,{shortUrl:"bu6Rfu",witch:"A",startTime:startDate,endTime:endDate},optionSevenDay,myChartSevenDay_tj,"A");
+            comment(url,{shortUrl:myShort,witch:"A",endTime:endDate},optionSevenDay,myChartSevenDay_tj,"A");
         }
     });
 
@@ -67,7 +67,7 @@ $(function () {
                 this.element.val(this.startDate.format(this.locale.format));
                 var startHour=this.startDate.format(this.locale.format);
                 console.log(this.startDate.format(this.locale.format));
-                comment(url,{shortUrl:"bu6Rfu",witch:"B",endTime:startHour + " 23:59:59"},optionTwentyFourHours,myChartTwentyFourHours,"B");
+                comment(url,{shortUrl:myShort,witch:"B",endTime:startHour + " 23:59:59"},optionTwentyFourHours,myChartTwentyFourHours,"B");
             }
         });
 
@@ -100,8 +100,7 @@ $(function () {
             this.element.val('');
         }else{
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            comment(url,{shortUrl:"bu6Rfu",witch:"C",startTime:startDate,endTime:endDate},optionOS,myChartOS,"C");
-            console.log(this.startDate.format(this.locale.format))
+            comment(url,{shortUrl:myShort,witch:"C",startTime:startDate,endTime:endDate},optionOS,myChartOS,"C");
         }
     });
 
@@ -133,8 +132,7 @@ $(function () {
             this.element.val('');
         }else{
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            comment(url,{shortUrl:"bu6Rfu",witch:"D",startTime:startDate,endTime:endDate},optionBrowser,myChartBrowser,"D");
-            console.log(this.startDate.format(this.locale.format))
+            comment(url,{shortUrl:myShort,witch:"D",startTime:startDate,endTime:endDate},optionBrowser,myChartBrowser,"D");
         }
     });
 
@@ -166,7 +164,7 @@ $(function () {
             this.element.val('');
         }else{
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            comment(url,{shortUrl:"bu6Rfu",witch:"E",startTime:startDate,endTime:endDate},optionChina,myChartChina,"E");
+            comment(url,{shortUrl:myShort,witch:"E",startTime:startDate,endTime:endDate},optionChina,myChartChina,"E");
         }
     });
 
@@ -198,7 +196,7 @@ $(function () {
             this.element.val('');
         }else{
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            comment(url,{shortUrl:"bu6Rfu",witch:"F",startTime:startDate,endTime:endDate},optionIsp,myChartIsp,"F");
+            comment(url,{shortUrl:myShort,witch:"F",startTime:startDate,endTime:endDate},optionIsp,myChartIsp,"F");
         }
     });
 
@@ -232,7 +230,7 @@ $(function () {
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
             console.log(this.startDate.format(this.locale.format));
             console.log(this.endDate.format(this.locale.format));
-            log(url,{shortUrl:"bu6Rfu",witch:"H",startTime:startDate,endTime:endDate})
+            log(url,{shortUrl:myShort,witch:"H",startTime:startDate,endTime:endDate})
         }
     });
 
@@ -264,7 +262,7 @@ $(function () {
             this.element.val('');
         }else{
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            ipAnalyse(url,{shortUrl:"bu6Rfu",witch:"I",startTime:startDate,endTime:endDate})
+            ipAnalyse(url,{shortUrl:myShort,witch:"I",startTime:startDate,endTime:endDate})
         }
     });
-});
+

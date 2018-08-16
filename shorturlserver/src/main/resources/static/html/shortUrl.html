@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>短链接</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap-daterangepicker/2.1.25/daterangepicker.css">
-    <link rel="stylesheet" href="../css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/select.css">
-    <link rel="stylesheet" href="../css/shortUrl.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/select.css">
+    <link rel="stylesheet" href="/css/shortUrl.css">
 	<style type="text/css">
 	        .main-header .navbar {
             background-color: #1997d6;
@@ -38,7 +38,7 @@
         <nav class="navbar navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" rel="home" href="/" title="愚公坊">
+                    <a class="navbar-brand" rel="home" title="愚公坊">
                         <!-- <img style="max-width:100px; margin-top: -5px;" src="//cdn.link-hub.cn/0x3.me/static/image/logo-cartoon-3.png"> -->
                         愚公坊
                     </a>
@@ -74,9 +74,10 @@
                     </span>
                     <div class="info-box-content">
                         <span class="info-box-text">短网址</span>
-                        <p class="shortUrl">
-                            http://yugyg.com
-                        </p>
+                        <div class="shortUrl">
+                            <input type="text" class="shortUrl_input">
+                            <button type="button" class="btn btn-default shortUrl_search">查询</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -222,7 +223,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h3 class="box-title">访问者设备系统分析</h3>
-                        <span class="smart_filter" data-type="C">
+                        <span class="smart_filter" data-type="C" data-tag="_c">
                             <i class="fa fa-plus"></i>设置筛选条件
                         </span>
                     </div>
@@ -254,7 +255,7 @@
                         <h4 class="text-center">
                             <strong>设备系统TOP5</strong>
                         </h4>
-                      	<div id="user-device"></div>
+                        <div id="user-device"></div>
                     </div>
                 </div>
             </div>
@@ -266,7 +267,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h3 class="box-title">访问者浏览器统计</h3>
-                        <span class="smart_filter" data-type="D">
+                        <span class="smart_filter" data-type="D" data-tag="_d">
                             <i class="fa fa-plus"></i>设置筛选条件
                         </span>
                     </div>
@@ -304,7 +305,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h3 class="box-title">国内访问地区统计</h3>
-                        <span class="smart_filter" data-type="E">
+                        <span class="smart_filter" data-type="E" data-tag="_e">
                             <i class="fa fa-plus"></i>设置筛选条件
                         </span>
                     </div>
@@ -346,7 +347,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h3 class="box-title">网络供应商统计</h3>
-                        <span class="smart_filter" data-type="F">
+                        <span class="smart_filter" data-type="F" data-tag="_f">
                             <i class="fa fa-plus"></i>设置筛选条件
                         </span>
                     </div>
@@ -382,13 +383,13 @@
             </p>
         </div>
         <!-- 访问记录明细 -->
-        <div class="box">
+        <div class="box" id="fwmx">
             <!--box-头部-->
             <div class="box-header with-border">
                 <div class="row">
                     <div class="col-md-8">
                         <h3 class="box-title">访问记录明细</h3>
-                        <span class="smart_filter">
+                        <span class="smart_filter" data-type="H" data-tag="_h">
                             <i class="fa fa-plus"></i>设置筛选条件
                         </span>
                     </div>
@@ -427,23 +428,6 @@
             </div>
             <!--分页-->
             <div class="box-footer" id="logs-pager">
-                <!-- <ul class="pagination pagination-sm no-margin pull-right">
-                    <li>
-                        <a href="#" class="bg-olive">1</a>
-                    </li>
-                    <li>
-                        <a href="#">2</a>
-                    </li>
-                    <li>
-                        <a href="#">3</a>
-                    </li>
-                    <li>
-                        <a href="#">...</a>
-                    </li>
-                    <li>
-                        <a href="#">下一页</a>
-                    </li>
-                </ul> -->
                 <div class="pagination pagination-sm no-margin pull-right">
                     <ul id="pageLimit"></ul>
                 </div>
@@ -459,7 +443,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h3 class="box-title">高频访问IP名单</h3>
-                        <span class="smart_filter">
+                        <span class="smart_filter" data-type="I" data-tag="_i">
                             <i class="fa fa-plus"></i>设置筛选条件
                         </span>
                     </div>
@@ -502,7 +486,7 @@
                 <h4 class="modal-title">设置筛选条件</h4>
             </div>
             <div class="modal-body" id="smart_filter_modal_body">
-                <div class="row filter_tpl">
+                <div class="row filter_tpl choose_os">
                     <div class="col-md-3">
                         <label>
                             <i class="fa fa-apple"></i>设备系统
@@ -510,7 +494,7 @@
                     </div>
                     <div class="col-md-9">
                         <select class="selectpicker equipment" style="width: 100%;">
-                            <option value="noChoose">不选择</option>
+                            <option value="">不选择</option>
                             <option value="Android">Android</option>
                             <option value="iPhone">iPhone</option>
                             <option value="iPad">iPad</option>
@@ -520,7 +504,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row filter_tpl">
+                <div class="row filter_tpl choose_browser">
                     <div class="col-md-3">
                         <label>
                             <i class="fa fa-chrome"></i>浏览器
@@ -528,7 +512,7 @@
                     </div>
                     <div class="col-md-9">
                         <select class="selectpicker browser" style="width: 100%;">
-                            <option value="noChoose">不选择</option>
+                            <option value="">不选择</option>
                             <option value="MetaSr">搜狗浏览器</option>
                             <option value="SogouMobileBrowser">搜狗手机浏览器</option>
                             <option value="UCBrowser">UC浏览器</option>
@@ -545,24 +529,19 @@
                         </select>
                     </div>
                 </div>
-                <div class="row filter_tpl">
+                <div class="row filter_tpl choose_city">
                     <div class="col-md-3">
                         <label>
                             <i class="fa fa-map-marker"></i>访客省份
                         </label>
                     </div>
                     <div class="col-md-9">
-                        <select class="selectpicker" style="width: 100%;">
-                            <option value="noChoose">不选择</option>
-                            <option value="1">广东省</option>
-                            <option value="2">广西省</option>
-                            <option value="3">福建省</option>
-                            <option value="4">湖南省</option>
-                            <option value="5">山东省</option>
+                        <select class="selectpicker pro" style="width: 100%;">
+                            <option value="">不选择</option>
                         </select>
                     </div>
                 </div>
-                <div class="row filter_tpl">
+                <div class="row filter_tpl choose_inter">
                     <div class="col-md-3">
                         <label>
                             <i class="fa fa-wifi"></i>网络供应商
@@ -570,7 +549,7 @@
                     </div>
                     <div class="col-md-9">
                         <select class="selectpicker inter" style="width: 100%;">
-                            <option value="noChoose">不选择</option>
+                            <option value="">不选择</option>
                             <option value="电信">电信</option>
                             <option value="移动">移动</option>
                             <option value="联通">联通</option>
@@ -586,7 +565,7 @@
                     </div>
                     <div class="col-md-9">
                         <select class="selectpicker status" style="width: 100%;">
-                            <option value="noChoose">不选择</option>
+                            <option value="">不选择</option>
                             <option value="0">成功</option>
                             <option value="1">失败</option>
                         </select>
@@ -600,17 +579,17 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../js/jquery-1.11.1.js"></script>
-<script src="../js/bootstrap.js"></script>
-<script src="../js/select.js"></script>
-<script src="../js/bootstrap-paginator.js"></script>
+<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/select.js"></script>
+<script src="/js/bootstrap-paginator.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap-daterangepicker/2.1.25/moment.min.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap-daterangepicker/2.1.25/daterangepicker.js"></script>
-<script src="../js/echarts.js"></script>
+<script src="/js/echarts.js"></script>
 <!--<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>-->
 <script src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
-<script src="../js/public_shortUrl.js"></script>
-<script src="../js/echarts.shortUrl.js"></script>
-<script src="../js/shortUrl_date.js"></script>
+<script src="/js/public_shortUrl.js"></script>
+<script src="/js/echarts.shortUrl.js"></script>
+<script src="/js/shortUrl_date.js"></script>
 </body>
 </html>

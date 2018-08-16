@@ -295,3 +295,10 @@ body,html{
 #logs-pager .pagination{
     margin:0;
 }
+.shortUrl_input{
+    width: 70%;
+    border: 1px solid #cccccc;
+}
+.shortUrl_search{
+    padding: 0 4px;
+}

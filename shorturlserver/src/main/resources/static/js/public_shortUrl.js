@@ -1,3 +1,32 @@
+var shortUrlPath="";
+var totalArr="";
+var ipArr="";
+var uvArr="";
+var tt="";
+var witchType="";
+var equipment_val="";
+var browser_val="";
+var inter_val="";
+var prov_val="";
+var status_val="";
+var nowDate=new Date();
+var nowYear=nowDate.getFullYear();
+var nowMonth=nowDate.getMonth()+1;
+var tag="";
+var myShort="";
+var url="/data";
+
+
+//判断日期是否大于10
+if (nowMonth<10){
+    nowMonth=String(String(0)+String(nowMonth));
+}
+var nowDay=nowDate.getDate();
+if (nowDay<10){
+    nowDay=String(String(0)+String(nowDay));
+}
+var nowTime=nowYear + "-" + nowMonth + "-" + nowDay;
+var xAxis="";
 function comment(url,parm,option,myChart,witch){
     $.post(url,parm,function (data) {
         var seriesArr;
@@ -6,8 +35,43 @@ function comment(url,parm,option,myChart,witch){
             case "A":
                 option.xAxis.data=data.data.sevenDaysData.xAxis.split(",");
                 seriesArr=data.data.sevenDaysData.series;
+                xAxisT=option.xAxis.data[option.xAxis.data.length-1];
+                xAxisY=option.xAxis.data[option.xAxis.data.length-2];
                 for (var i=0;i<seriesArr.length;i++) {
                     option.series[i].data = seriesArr[i].split(",");
+                }
+                totalArr=data.data.sevenDaysData.series[0].split(",");
+                ipArr=data.data.sevenDaysData.series[4].split(",");
+                uvArr=data.data.sevenDaysData.series[1].split(",");
+                $("#week-summary-total").html(totalArr[totalArr.length-1]);
+                $("#week-summary-ip").html(ipArr[ipArr.length-1]);
+                $("#week-summary-uv").html(uvArr[uvArr.length-1]);
+                $('[data-type="week-summary"]').click(function (e) {
+                    e.preventDefault();
+                    $(this).siblings().removeClass('active');
+                    $(this).addClass('active');
+                    console.log($(this).data("day"));
+                    if($(this).data("day")=="today"){
+                        $("#week-summary-total").html(totalArr[totalArr.length-1]);
+                        $("#week-summary-ip").html(ipArr[ipArr.length-1]);
+                        $("#week-summary-uv").html(uvArr[uvArr.length-1]);
+                    }else if($(this).data("day")=="yesterday"){
+                        $("#week-summary-total").html(totalArr[totalArr.length-2]);
+                        $("#week-summary-ip").html(ipArr[ipArr.length-2]);
+                        $("#week-summary-uv").html(uvArr[uvArr.length-2]);
+                    }else if($(this).data("day")=="sevenDay"){
+                        $("#week-summary-total").html(tt.total);
+                        $("#week-summary-ip").html(tt.ip);
+                        $("#week-summary-uv").html(tt.uv);
+                    }
+                });
+                tt=data.data.tt;
+                if(xAxisT!=nowTime){
+                    $('[data-day="today"]').html(xAxisT);
+                    $('[data-day="yesterday"]').html(xAxisY)
+                }else {
+                    $('[data-day="today"]').html("今天");
+                    $('[data-day="yesterday"]').html("昨天");
                 }
                 break;
                 // 24小时内访问统计
@@ -30,6 +94,8 @@ function comment(url,parm,option,myChart,witch){
                     list.push(data.name);
                     totalDeviceNum += data.value;
                 });
+                console.log(arr);
+                $("#user-device").empty();
                 arr.forEach(function(data,index){
                     var templete = `
                         <div class="progress-group" style="margin: 40px 0;">
@@ -97,9 +163,6 @@ function comment(url,parm,option,myChart,witch){
                 seriesArr=data.data.inter.seriesStr;
                 option.series[0].data=seriesArr.split(",");
                 break;
-                // 访客设备分辨率信息分析
-            // case "G":
-            //     console.log(data)
         }
         myChart.setOption(option);
         if(witch == "E"||witch == "EC"){
@@ -107,54 +170,88 @@ function comment(url,parm,option,myChart,witch){
         }
     })
 }
-var totalPage=1; //访问记录明细总页数
-// /访问记录明细分页初始化
-$('#pageLimit').bootstrapPaginator({
-    currentPage: 1,//当前的请求页面。
-    totalPages: totalPage,//一共多少页。
-    size:"normal",//应该是页眉的大小。
-    bootstrapMajorVersion: 3,//bootstrap的版本要求。
-    alignment:"right",
-    numberOfPages:5,//一页列出多少数据。
-    itemTexts: function (type, page, current) {//如下的代码是将页眉显示的中文显示我们自定义的中文。
-        switch (type) {
-            case "first": return "首页";
-            case "prev": return "上一页";
-            case "next": return "下一页";
-            case "last": return "末页";
-            case "page": return page;
-        }
-    },
-    onPageClicked: function (event, originalEvent, type, page){//给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字。
-        $.ajax({
-            url:'http://spring.yugyg.com:8901/data?shortUrl=qAjiMr&witch=H',
-            type:'POST',
-            data:{'page':page},
-            dataType:'JSON',
-            success:function (data) {
-                if( data && data.result =="success" ) addLog(data);
-                else alert("网络出问题了，请刷新后查看！");
-            }
-        })
-    }
-});
 
+
+
+//查询短链接网址
+$(".shortUrl_search").click(function () {
+    shortUrlPath=$(".shortUrl_input").val();
+    //添加到本地缓存
+    localStorage.setItem("myShortUrl",shortUrlPath);
+    myShort = localStorage.getItem("myShortUrl");
+    comment(url,{shortUrl:myShort,witch:"A"},optionSevenDay,myChartSevenDay_tj,"A");
+    comment(url,{shortUrl:myShort,witch:"B"},optionTwentyFourHours,myChartTwentyFourHours,"B");
+    comment(url,{shortUrl:myShort,witch:"C"},optionOS,myChartOS,"C");
+    comment(url,{shortUrl:myShort,witch:"D"},optionBrowser,myChartBrowser,"D");
+    comment(url,{shortUrl:myShort,witch:"E"},optionChina,myChartChina,"E");
+    comment(url,{shortUrl:myShort,witch:"F"},optionIsp,myChartIsp,"F");
+    log(url,{shortUrl:myShort,witch:"H"});
+    ipAnalyse(url,{shortUrl:myShort,witch:"I"});
+    // 顶部三个数据
+    $.post(url,{shortUrl:myShort,witch:""},function (data) {
+        var topThree=data.data.topThree;
+        $(".total_val").html(topThree.total);
+        $(".ip_val").html(topThree.ip);
+        $(".uv_val").html(topThree.uv);
+    });
+    // 7天左侧按钮点击请求时间
+    $.post(url,{shortUrl:myShort,witch:"A"},function (data) {
+        totalArr=data.data.sevenDaysData.series[0].split(",");
+        ipArr=data.data.sevenDaysData.series[4].split(",");
+        uvArr=data.data.sevenDaysData.series[1].split(",");
+        tt=data.data.tt;
+        console.log(tt);
+    });
+});
 // 请求记录明细
 function log(url,parms){
     $.post(url,parms,function(data){
         if( data && data.result =="success" ){
+        	var totalPage = data.data.totalPage;
+        	$('#pageLimit').bootstrapPaginator({
+        	    currentPage: 1,//当前的请求页面。
+        	    totalPages: totalPage,//一共多少页。
+        	    size:"normal",//应该是页眉的大小。
+        	    bootstrapMajorVersion: 3,//bootstrap的版本要求。
+        	    alignment:"right",
+        	    numberOfPages:5,//一页列出多少数据。
+        	    itemTexts: function (type, page, current) {//如下的代码是将页眉显示的中文显示我们自定义的中文。
+        	        switch (type) {
+        	            case "first": return "首页";
+        	            case "prev": return "上一页";
+        	            case "next": return "下一页";
+        	            case "last": return "末页";
+        	            case "page": return page;
+        	        }
+        	    },
+        	    onPageClicked: function (event, originalEvent, type, page){//给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字。
+        	        $.ajax({
+        	            url:'/data?witch=H&shortUrl='+myShort,
+        	            type:'POST',
+        	            data:{'page':page},
+        	            dataType:'JSON',
+        	            success:function (data) {
+        	                if( data && data.result =="success" ) {
+        	                	addLog(data);
+        	                	var top = $("#fwmx").offset().top;
+        	                	$(document).scrollTop(top);
+        	                }else{
+        	                	alert("网络出问题了，请刷新后查看！");
+        	                }
+        	            }
+        	        })
+        	    }
+        	});
             addLog(data);
-            console.log(data)
+        }else {
+        	alert("网络出问题了，请刷新后查看！")
         }
-        else alert("网络出问题了，请刷新后查看！");
     })
 }
-log("http://192.168.0.55:8901/data",{shortUrl:"qAjiMr",witch:"H"});
 
 // 在页面添加记录明细
 function addLog(data){
     data = data.data;
-    totalPage = data.totalPage;//总页数
     var allRecord = data.allRecord;//列表数据
     if( !allRecord ) allRecord = [];
 
@@ -199,8 +296,6 @@ function ipAnalyse(url,parms){
         })
     })
 }
-ipAnalyse("http://192.168.0.55:8901/data",{shortUrl:"qAjiMr",witch:"I"});
-
 
 //时间戳转日期格式
 function timestampToTime(timestamp) {
@@ -219,3 +314,94 @@ function timestampToTime(timestamp) {
 
     return Y+M+D+h+m+s;
 }
+
+$(function () {
+    //设置筛选条件
+    $(".smart_filter").click(function () {
+        $("#smart_filter_modal").attr("data-type",$(this).data('type'));
+        $("#smart_filter_modal").attr("data-tag",$(this).data('tag'));
+        tag = $(this).data("tag");
+        $("#smart_filter_modal").show();
+        $("html").addClass("modal-open");
+        var data_tag=$(this).data("tag");
+        switch (data_tag)
+        {
+            case "_c":
+                $(".choose_os").hide();
+                $(".choose_os").siblings().show();
+                break;
+            case "_d":
+                $(".choose_browser").hide();
+                $(".choose_browser").siblings().show();
+                break;
+            case "_e":
+                $(".choose_city").hide();
+                $(".choose_city").siblings().show();
+                break;
+            case "_f":
+                $(".choose_inter").hide();
+                $(".choose_inter").siblings().show();
+                break;
+            case "_h":
+                $("#smart_filter_modal_body").find(".filter_tpl").show();
+            case "_i":
+                $("#smart_filter_modal_body").find(".filter_tpl").show();
+        }
+    });
+    $('[data-dismiss="modal"]').click(function () {
+        $("#smart_filter_modal").hide();
+        $("html").removeClass("modal-open");
+    });
+    //点击设置发送select请求
+    $(".send").click(function () {
+        witchType=$("#smart_filter_modal").attr("data-type");
+        equipment_val=$(".equipment").find("option:selected").val();
+        browser_val=$(".browser").find("option:selected").val();
+        inter_val=$(".inter").find("option:selected").val();
+        status_val=$(".status").find("option:selected").val();
+        prov_val=$(".pro").find("option:selected").text();
+        console.log(prov_val);
+        $("#smart_filter_modal").hide();
+        $("html").removeClass("modal-open");
+
+        switch (witchType) {
+            case "C":
+                comment(url,{shortUrl:myShort,witch:witchType,equipment:equipment_val,browser:browser_val,internet:inter_val,status:status_val,privonce:prov_val},optionOS,myChartOS,witchType);
+                break;
+            case "D":
+                comment(url,{shortUrl:myShort,witch:witchType,equipment:equipment_val,browser:browser_val,internet:inter_val,status:status_val,privonce:prov_val},optionBrowser,myChartBrowser,witchType);
+                break;
+            case "E":
+                comment(url,{shortUrl:myShort,witch:witchType,equipment:equipment_val,browser:browser_val,internet:inter_val,status:status_val,privonce:prov_val},optionChina,myChartChina,witchType);
+                break;
+            case "F":
+                comment(url,{shortUrl:myShort,witch:witchType,equipment:equipment_val,browser:browser_val,internet:inter_val,status:status_val,privonce:prov_val},optionIsp,myChartIsp,witchType);
+                break;
+            case "H":
+                log(url,{shortUrl:myShort,witch:witchType,equipment:equipment_val,browser:browser_val,internet:inter_val,status:status_val,privonce:prov_val});
+                break;
+            case "I":
+                ipAnalyse(url,{shortUrl:myShort,witch:witchType,equipment:equipment_val,browser:browser_val,internet:inter_val,status:status_val,privonce:prov_val});
+                break;
+        }
+    });
+});
+//判断是否为空
+function isNull(str){
+    if(str == '' || str == 'undefined' || str == null || str.length==0 || str == undefined){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+$.post("/getProvinces",{},function (data) {
+    for(var i=0;i<data.length;i++){
+        var pro=`
+            <option>
+                ${data[i]["provinceName"]}
+            </option>
+        `.trim();
+        $(".pro").append(pro);
+    }
+});

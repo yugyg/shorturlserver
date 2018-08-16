@@ -5,15 +5,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.yugyg.entity.YgfDljSearchRecord;
 import com.yugyg.entity.YgfProvince;
+import com.yugyg.mapper.YgfDljSearchRecordMapper;
 import com.yugyg.service.ShortUrlService;
 import com.yugyg.service.data.IPData;
 import com.yugyg.service.data.PieData;
@@ -28,6 +30,7 @@ import com.yugyg.service.data.PublicResults;
 import com.yugyg.service.data.ResultEntity;
 import com.yugyg.service.data.SearchData;
 import com.yugyg.service.data.TopThree;
+import com.yugyg.service.impl.ShortUrlServiceImpl;
 import com.yugyg.util.Const;
 import com.yugyg.util.Util;
 
@@ -41,6 +44,9 @@ import com.yugyg.util.Util;
 public class DataController {
 	@Resource
 	private ShortUrlService shortUrlService;
+	@Resource
+	private YgfDljSearchRecordMapper ygfDljSearchRecordMapper;
+	private static Logger logger = LoggerFactory.getLogger(DataController.class);
 	/**
 	 * 短链数据统计
 	 * @param startTime 开始时间
@@ -81,16 +87,28 @@ public class DataController {
 		if (!Util.isEmpty(shortUrl)) {
 			result.setResult(Const.result_success);
 			SearchData searchData = new SearchData();
-			searchData.setBegin(startTime);
+			if (!Util.isEmpty(startTime)) {
+				searchData.setBegin(startTime);
+			}
 			searchData.setEnd(Util.isEmpty(endTime)?Util.dateFormat(new Date(),Const.date_formate_1):endTime);
 			searchData.setShortUrl(shortUrl);
 			String longU = shortUrlService.getLongUrl(shortUrl);
 			searchData.setLongUrl(Util.isEmpty(longU)?"":longU.replaceAll("(&|.?)ygfPhoneNum=[0-9]*", ""));
-			searchData.setCountry(country);
-			searchData.setBrowser(browser);
-			searchData.setEquipment(equipment);
-			searchData.setInternet(internet);
-			searchData.setStatus(status);
+			if (!Util.isEmpty(country)) {
+				searchData.setCountry(country);
+			}
+			if (!Util.isEmpty(browser)) {
+				searchData.setBrowser(browser);
+			}
+			if (!Util.isEmpty(equipment)) {
+				searchData.setEquipment(equipment);
+			}
+			if (!Util.isEmpty(internet)) {
+				searchData.setInternet(internet);
+			}
+			if (!Util.isEmpty(status)) {
+				searchData.setStatus(status);
+			}
 			switch (witch) {
 			case "A"://最近七天加今天
 				PublicResults sevenDaysData = shortUrlService.selectSevenDaysData(searchData);
@@ -175,15 +193,16 @@ public class DataController {
 		result.setData(map);
 		return result;
 	}
-	
-	
-	public static void main(String[] args) {
-		String s = "http://www.yugyg.com/frontGoodsController/goods?spuid=1294&phoneNum=15895325152&userName=asd";
-		Pattern pattern = Pattern.compile("(&|.?)phoneNum=[0-9]*");
-		Matcher matcher = pattern.matcher(s);
-		while (matcher.find()) {
-			System.out.println(matcher.group());
+	/*@GetMapping("/aaa")
+	public List<YgfDljSearchRecord> getProvinces() {
+		SearchData searchData = new SearchData();
+		searchData.setEnd(Util.dateFormat(new Date(),Const.date_formate_1));
+		List<YgfDljSearchRecord> list = shortUrlService.selectAllRecord(new SearchData());
+		for (int i = 0; i < list.size(); i++) {
+			YgfDljSearchRecord e= list.get(i);
+			e.setIpbelong(Util.getIpBelong(e.getIp()));
+			ygfDljSearchRecordMapper.updateByPrimaryKey(e);
 		}
-		System.out.println();
-	}
+		return list;
+	}*/
 }

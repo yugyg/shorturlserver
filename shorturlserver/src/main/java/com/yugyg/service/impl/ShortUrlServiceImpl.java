@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ import com.yugyg.util.HttpUtil;
 import com.yugyg.util.TranslateLink;
 import com.yugyg.util.Util;
 
+import sun.util.logging.resources.logging;
+
 /**
  * @author jiangchao1
  */
@@ -39,7 +43,6 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 	private YgfLongShortLinkMapper ygfLongShortLinkMapper;
 	@Autowired
 	private YgfDljExMapper ygfDljExMapper;
-	
 	@Transactional
 	@Override
 	public YgfLongShortLink insertShortLink(String longUrl) {
@@ -75,7 +78,6 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 		ygfDljSearchRecord.setSearchshort(searchShort);
 		ygfDljSearchRecord.setTime(new Date());
 		ygfDljSearchRecord.setCookie(cookie);
-		ygfDljSearchRecord.setStatus(Util.isEmpty(userAgent)?1:0);
 		ygfDljSearchRecord.setReferer(Util.isEmpty(referer)?"直接访问":referer);
 		ygfDljSearchRecord.setUseragent(userAgent);
 		YgfLongShortLink link = ygfDljExMapper.selectShortLink(searchShort);
@@ -86,15 +88,10 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 			ygfDljSearchRecord.setPhonenum(matcher.group().substring(13));
 		}
 		ygfDljSearchRecord.setSearchlong(lu.replaceAll("(&|.?)ygfPhoneNum=[0-9]*", ""));
-		String s = HttpUtil.getInstance().httpExecute(Const.aliIpSearch+ip);
-		JSONObject obj = JSONObject.parseObject(s);
-		JSONObject data = obj==null?null:obj.getJSONObject("data");
-		//中国-江苏-无锡-电信
-		if (data!=null) {
-			ygfDljSearchRecord.setIpbelong(data.getString("country")+"-"+data.getString("region")+"-"+data.getString("city")+"-"+data.getString("isp"));
-		}else {
-			ygfDljSearchRecord.setIpbelong("XX-XX-XX-XX");
-		}
+		String ipBelong = Util.getIpBelong(ip);
+		ygfDljSearchRecord.setStatus((Util.isEmpty(userAgent)||(Util.isEmpty(ip)))?1:0);
+		//江苏省无锡市-电信
+		ygfDljSearchRecord.setIpbelong(ipBelong);
 		ygfDljSearchRecordMapper.insert(ygfDljSearchRecord);
 	}
 	@Override

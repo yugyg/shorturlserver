@@ -6,7 +6,14 @@ import java.util.Date;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
+import com.yugyg.controller.DataController;
+
 public class Util {
+	private static Logger logger = LoggerFactory.getLogger(Util.class);
 	//判断浏览器
 	public static String getBrowser(String user_agent) {
 		String result= "";
@@ -94,7 +101,7 @@ public class Util {
 	 * @return
 	 */
 	public static boolean isEmpty(String value) {
-		if(value == "" || value == null) {
+		if(value == "" || value == null || value == "null") {
 			return true;
 		}else {
 			return false;
@@ -119,5 +126,29 @@ public class Util {
 			ip = request.getRemoteAddr();
 		}
 		return ip;
+	}
+	/**
+	 * 获得ip归属地
+	 * @param data
+	 * @return
+	 */
+	public static String getIpBelong(String ip) {
+		if (ip.indexOf(",") != -1) {
+			String[] ips = ip.split(",");
+			ip = ips[ips.length-1];
+		}
+		String s = HttpUtil.getInstance().httpExecute(Const.juheIpSearch+ip);
+		logger.info("url============"+Const.juheIpSearch+ip);
+		logger.info("ip============"+s);
+		JSONObject obj = JSONObject.parseObject(s);
+		logger.info("obj============"+obj);
+		JSONObject result = obj==null?null:obj.getJSONObject("result");
+		logger.info("result============"+result);
+		if (result!=null) {
+			s = result.getString("area")+"-"+result.getString("location");
+		}else {
+			s ="XX-XX";
+		}
+		return s;
 	}
 }

@@ -54,13 +54,13 @@
   		<if test="equipment != '' and equipment != null">
   			AND rec.equipment = #{equipment}
   		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+  		<if test="province != '' and province != null">
+  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
   		</if>
   		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  			AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
   		</if>
-  		<if test="browser != '' and browser != null">
+  		<if test="status != '' and status != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
   		GROUP BY rec.equipment ORDER BY COUNT(rec.equipment) DESC
@@ -78,13 +78,13 @@
   		<if test="equipment != '' and equipment != null">
   			AND rec.equipment = #{equipment}
   		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+  		<if test="province != '' and province != null">
+  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
   		</if>
   		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  			AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
   		</if>
-  		<if test="browser != '' and browser != null">
+  		<if test="status != '' and status != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
   		GROUP BY rec.browser)a
@@ -102,13 +102,13 @@
   		<if test="equipment != '' and equipment != null">
   			AND rec.equipment = #{equipment}
   		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+  		<if test="province != '' and province != null">
+  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
   		</if>
   		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  			AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
   		</if>
-  		<if test="browser != '' and browser != null">
+  		<if test="status != '' and status != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
   		GROUP BY split_str(rec.ipBelong,'-',4))a
@@ -125,13 +125,13 @@
   		<if test="equipment != '' and equipment != null">
   			AND rec.equipment = #{equipment}
   		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+  		<if test="province != '' and province != null">
+  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
   		</if>
   		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  			AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
   		</if>
-  		<if test="browser != '' and browser != null">
+  		<if test="status != '' and status != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
   		GROUP BY rec.resolution
@@ -148,13 +148,13 @@
   		<if test="equipment != '' and equipment != null">
   			AND rec.equipment = #{equipment}
   		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+  		<if test="province != '' and province != null">
+  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
   		</if>
   		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  			AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
   		</if>
-  		<if test="browser != '' and browser != null">
+  		<if test="status != '' and status != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
   		ORDER BY rec.time DESC Limit #{startIndex},50;
@@ -171,13 +171,13 @@
   		<if test="equipment != '' and equipment != null">
   			AND rec.equipment = #{equipment}
   		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+  		<if test="province != '' and province != null">
+  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
   		</if>
   		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  			AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
   		</if>
-  		<if test="browser != '' and browser != null">
+  		<if test="status != '' and status != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
   	</select>
@@ -194,13 +194,13 @@
   		<if test="equipment != '' and equipment != null">
   			AND rec.equipment = #{equipment}
   		</if>
-  		<if test="country != '' and country != null">
-  			AND split_str(rec.ipBelong,'-',2) LIKE #{province}
+  		<if test="province != '' and province != null">
+  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
   		</if>
   		<if test="internet != '' and internet != null">
-  			AND split_str(rec.ipBelong,'-',4) = #{internet}
+  			AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
   		</if>
-  		<if test="browser != '' and browser != null">
+  		<if test="status != '' and status != null">
   			AND IFNULL(rec.status,0) = #{status}
   		</if>
   		GROUP BY rec.ip ORDER BY COUNT(rec.ip) DESC LIMIT 0 , 50
@@ -209,11 +209,11 @@
   		SELECT COUNT(1)total,COUNT(DISTINCT rec.ip)ip,COUNT(DISTINCT rec.cookie)uv FROM ygf_dlj_search_record rec WHERE rec.searchLong = #{longUrl}
   	</select>
   	<select id="selectPrivonce" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PieData">
-		SELECT p.p_name name,IFNULL(recd.value,0)value FROM 
+		SELECT p.p_name name,sum(IFNULL(recd.value,0))value FROM 
 			(
 				SELECT replace(replace(replace(replace(replace(replace(replace(ygf_province.province_name,"省",''),"市",''),"壮族自治区",''),"回族自治区",''),"维吾尔自治区",''),"自治区",''),"特别行政区",'')p_name FROM ygf_province
 			)p LEFT JOIN 
-			(SELECT split_str(rec.ipBelong,'-',2)name,COUNT(1)value FROM ygf_dlj_search_record rec
+			(SELECT split_str(rec.ipBelong,'-',1)name,COUNT(1)value FROM ygf_dlj_search_record rec
 				  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl} 
 				  	<if test="begin != '' and begin != null">
 			  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
@@ -224,18 +224,18 @@
 					<if test="equipment != '' and equipment != null">
 						AND rec.equipment = #{equipment}
 					</if>
-					<if test="country != '' and country != null">
-						AND split_str(rec.ipBelong,'-',2) LIKE #{province}
-					</if>
+					<if test="province != '' and province != null">
+			  			AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%")
+			  		</if>
 					<if test="internet != '' and internet != null">
-						AND split_str(rec.ipBelong,'-',4) = #{internet}
+						AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
 					</if>
-					<if test="browser != '' and browser != null">
+					<if test="status != '' and status != null">
 						AND IFNULL(rec.status,0) = #{status}
 					</if>
-					GROUP BY split_str(rec.ipBelong,'-',2)
-			)recd ON recd.name like p.p_name
-			GROUP BY p.p_name ORDER BY IFNULL(recd.value,0) DESC
+					GROUP BY split_str(rec.ipBelong,'-',1)
+			)recd ON recd.name like CONCAT("%",p.p_name,"%")
+			GROUP BY p.p_name ORDER BY sum(IFNULL(recd.value,0)) DESC 
 		<!-- UNION ALL
 		(SELECT pc.c_name name,IFNULL(recd.value,0)value FROM 
 			(
@@ -253,11 +253,11 @@
 					<if test="equipment != '' and equipment != null">
 						AND rec.equipment = #{equipment}
 					</if>
-					<if test="country != '' and country != null">
-						AND split_str(rec.ipBelong,'-',2) LIKE #{province}
-					</if>
+					<if test="privonce != '' and privonce != null">
+			  			AND #{privonce} LIKE CONCAT("%",split_str(rec.ipBelong,'-',2),"%")
+			  		</if>
 					<if test="internet != '' and internet != null">
-						AND split_str(rec.ipBelong,'-',4) = #{internet}
+						AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
 					</if>
 					<if test="browser != '' and browser != null">
 						AND IFNULL(rec.status,0) = #{status}
@@ -267,13 +267,13 @@
 		); -->
 	</select>
   	<select id="selectCity" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.PieData">
-		SELECT pc.c_name name,IFNULL(recd.value,0)value FROM 
+			SELECT pc.city_name name,IFNULL(recd.value,0)value FROM 
 			(
-				SELECT replace(replace(replace(replace(replace(replace(replace(CONCAT(p.province_name,c.city_name),"省",''),"市",''),"壮族自治区",''),"回族自治区",''),"维吾尔自治区",''),"自治区",''),"特别行政区",'')
-				p_c,(c.city_name)c_name FROM ygf_province p LEFT JOIN ygf_city c ON p.province_id = c.province_id WHERE p.province_name LIKE CONCAT("%",#{province},"%")
+				SELECT p.province_name 
+				,c.city_name FROM ygf_province p LEFT JOIN ygf_city c ON p.province_id = c.province_id WHERE p.province_name LIKE CONCAT("%",#{province},"%")
 			)pc LEFT JOIN 
-			(SELECT CONCAT(split_str(rec.ipBelong,'-',2),split_str(rec.ipBelong,'-',3))p_c,COUNT(1) value FROM ygf_dlj_search_record rec
-				  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl} AND split_str(rec.ipBelong,'-',2) = #{province} GROUP BY split_str(rec.ipBelong,'-',3)
+			(SELECT CONCAT(split_str(rec.ipBelong,'-',1))p_c,COUNT(1) value FROM ygf_dlj_search_record rec
+				  	WHERE DATE(rec.time) &lt;= CAST(#{end} AS DATE) AND rec.searchLong = #{longUrl} AND split_str(rec.ipBelong,'-',1) LIKE CONCAT("%",#{province},"%") 
 				  	<if test="begin != '' and begin != null">
 			  			AND	DATE(rec.time) >= CAST(#{begin} AS DATE)
 			  		</if>
@@ -283,20 +283,18 @@
 					<if test="equipment != '' and equipment != null">
 						AND rec.equipment = #{equipment}
 					</if>
-					<if test="country != '' and country != null">
-						AND split_str(rec.ipBelong,'-',2) LIKE #{province}
-					</if>
 					<if test="internet != '' and internet != null">
-						AND split_str(rec.ipBelong,'-',4) = #{internet}
+						AND split_str(rec.ipBelong,'-',2) LIKE CONCAT("%",#{internet},"%")
 					</if>
-					<if test="browser != '' and browser != null">
+					<if test="status != '' and status != null">
 						AND IFNULL(rec.status,0) = #{status}
 					</if>
-			)recd ON recd.p_c like pc.p_c
-			GROUP BY pc.p_c ORDER BY IFNULL(recd.value,0) DESC ,pc.p_c 
+					GROUP BY split_str(rec.ipBelong,'-',1)
+			)recd ON recd.p_c LIKE CONCAT("%",pc.province_name,"%",pc.city_name,"%") 
+			GROUP BY pc.city_name ORDER BY IFNULL(recd.value,0) DESC ,pc.city_name;
   	</select>
 	<select id="getAllProvince" resultType="com.yugyg.entity.YgfProvince">
-		SELECT * FROM ygf_province;
+		SELECT province_name provinceName FROM ygf_province
 	</select>
 	<select id="getAllCity" resultType="com.yugyg.entity.YgfCity">
 		SELECT * FROM ygf_city;
