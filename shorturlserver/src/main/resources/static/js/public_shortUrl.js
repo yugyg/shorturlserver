@@ -267,7 +267,7 @@ function addLog(data){
             <td>${list.ip}</td>
             <td>${list.ipbelong}</td>
             <td>
-                <div class="refer_area">${list.searchlong}</div>
+                <div class="refer_area">${list.referer}</div>
             </td>
             <td><span class="${list.status == 1 ? 'label label-warning' : '' }">${list.status == 1 ? '过滤' : '成功'}</span></td>
         </tr>

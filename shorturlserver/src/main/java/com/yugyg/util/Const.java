@@ -10,7 +10,7 @@ public class Const {
 	//cookie格式
 	public static final String cookieFormate = "yyyy-MM-dd";
 	//时间格式
-	public static final String date_formate_1 = "yyyy-MM-dd hh:00:00";
+	public static final String date_formate_1 = "yyyy-MM-dd HH:00:00";
 	/**
 	 * 返回结果
 	 */

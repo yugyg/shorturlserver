@@ -177,6 +177,6 @@ public class ShortUrlController {
 		return "redirect:/html/saveUrl.html";
 	}
 	public static void main(String[] args) {
-		System.out.println(Util.getIpBelong("218.205.17.168"));
+		System.out.println(Util.dateFormat(new Date(),Const.date_formate_1));
 	}
 }
