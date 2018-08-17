@@ -50,7 +50,6 @@ function comment(url,parm,option,myChart,witch){
                     e.preventDefault();
                     $(this).siblings().removeClass('active');
                     $(this).addClass('active');
-                    console.log($(this).data("day"));
                     if($(this).data("day")=="today"){
                         $("#week-summary-total").html(totalArr[totalArr.length-1]);
                         $("#week-summary-ip").html(ipArr[ipArr.length-1]);
@@ -94,7 +93,6 @@ function comment(url,parm,option,myChart,witch){
                     list.push(data.name);
                     totalDeviceNum += data.value;
                 });
-                console.log(arr);
                 $("#user-device").empty();
                 arr.forEach(function(data,index){
                     var templete = `
@@ -124,7 +122,6 @@ function comment(url,parm,option,myChart,witch){
                 break;
                 // 国内访问地区统计
             case "E":
-                console.log(data);
                 option.series[0].data=data.data.privon;
                 option.visualMap.min=data.data.privon[data.data.privon.length-1].value;
                 option.visualMap.max=Math.ceil(data.data.privon[0].value);
@@ -139,7 +136,6 @@ function comment(url,parm,option,myChart,witch){
                 break;
                 // 网络供应商统计
             case "EC":
-            	console.log(data);
             	option.series[0].data=data.data.city;
             	option.visualMap.min=data.data.city[data.data.city.length-1].value;
             	option.visualMap.max=Math.ceil(data.data.city[0].value);
@@ -153,7 +149,6 @@ function comment(url,parm,option,myChart,witch){
                 optionProvince.series[0].data=x;
             	break;
             case "F":
-                console.log(data);
                 if(!data.data.inter){
                     option.yAxis[0].data="";
                     option.series[0].data ="";
@@ -200,7 +195,6 @@ $(".shortUrl_search").click(function () {
         ipArr=data.data.sevenDaysData.series[4].split(",");
         uvArr=data.data.sevenDaysData.series[1].split(",");
         tt=data.data.tt;
-        console.log(tt);
     });
 });
 // 请求记录明细
@@ -208,6 +202,13 @@ function log(url,parms){
     $.post(url,parms,function(data){
         if( data && data.result =="success" ){
         	var totalPage = data.data.totalPage;
+        	if (totalPage <= 0) {
+        		var $logTable = $("#logs-area");
+        	    var $tbody = $logTable.find("tbody");
+        	    $tbody.empty();
+        	    $('#pageLimit').empty();
+        	    return;
+			}
         	$('#pageLimit').bootstrapPaginator({
         	    currentPage: 1,//当前的请求页面。
         	    totalPages: totalPage,//一共多少页。
@@ -360,7 +361,6 @@ $(function () {
         inter_val=$(".inter").find("option:selected").val();
         status_val=$(".status").find("option:selected").val();
         prov_val=$(".pro").find("option:selected").text();
-        console.log(prov_val);
         $("#smart_filter_modal").hide();
         $("html").removeClass("modal-open");
 

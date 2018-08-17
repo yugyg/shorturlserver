@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import com.yugyg.entity.YgfLongShortLink;
@@ -124,6 +125,7 @@ public class ShortUrlController {
 	 * @return
 	 */
 	@PostMapping("/saveSU")
+	@ResponseBody
 	public ResultEntity longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest) {
 		ResultEntity result = new ResultEntity();
 		Map<String, String> map = new HashMap<String,String>();
@@ -147,6 +149,7 @@ public class ShortUrlController {
 	 * @return
 	 */
 	@GetMapping("/getLongUrl")
+	@ResponseBody
 	public ResultEntity getLongUrl(@RequestParam(required = true) String shortUrl) {
 		ResultEntity result = new ResultEntity();
 		if (shortUrl==""||shortUrl==null) {
@@ -168,7 +171,8 @@ public class ShortUrlController {
 	 * @param httpRequest
 	 * @return
 	 */
-	@PostMapping("/getProvinces")
+	@RequestMapping("/getProvinces")
+	@ResponseBody
 	public List<YgfProvince> getProvinces() {
 		return shortUrlService.getAllProvince();
 	}

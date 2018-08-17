@@ -228,8 +228,7 @@
             this.element.val('');
         }else{
             this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-            console.log(this.startDate.format(this.locale.format));
-            console.log(this.endDate.format(this.locale.format));
+          
             log(url,{shortUrl:myShort,witch:"H",startTime:startDate,endTime:endDate})
         }
     });
