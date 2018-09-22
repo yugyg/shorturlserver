@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +30,6 @@ import com.yugyg.service.data.PublicResults;
 import com.yugyg.service.data.ResultEntity;
 import com.yugyg.service.data.SearchData;
 import com.yugyg.service.data.TopThree;
-import com.yugyg.service.impl.ShortUrlServiceImpl;
 import com.yugyg.util.Const;
 import com.yugyg.util.Util;
 
