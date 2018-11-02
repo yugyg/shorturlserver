@@ -38,7 +38,7 @@
 		cale LEFT JOIN (SELECT * FROM ygf_dlj_search_record recod WHERE recod.searchLong = #{longUrl} AND 
 		recod.time >= date_sub(CAST(#{end} AS datetime),INTERVAL +24 HOUR)
 		AND recod.time &lt;= CAST(#{end} AS datetime)
-		) sr ON cale.time = DATE_FORMAT(sr.time,"%m/%d %h:00")
+		) sr ON cale.time = DATE_FORMAT(sr.time,"%m/%d %H:00")
 		GROUP BY cale.time ORDER BY cale.date,cale.hours
 		)a;
   	</select>
