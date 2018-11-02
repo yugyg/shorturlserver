@@ -30,6 +30,8 @@ public class SearchData {
 	private String province;
 	/**pageNum*/
 	private Integer startIndex = 0;
+	/**desc描述*/
+	private String desc;
 	
 	public String getBrowser() {
 		return browser;
@@ -102,5 +104,11 @@ public class SearchData {
 	}
 	public void setLongUrl(String longUrl) {
 		this.longUrl = longUrl;
+	}
+	public String getDesc() {
+		return desc;
+	}
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 }

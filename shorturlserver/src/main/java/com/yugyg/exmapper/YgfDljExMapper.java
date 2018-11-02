@@ -14,6 +14,7 @@ import com.yugyg.service.data.PublicResults;
 import com.yugyg.service.data.SearchData;
 import com.yugyg.service.data.SevenDaysData;
 import com.yugyg.service.data.TopThree;
+import com.yugyg.service.data.YgfLongShortLinkEx;
 
 @Repository("ygfDljExMapper")
 public interface YgfDljExMapper {
@@ -119,4 +120,12 @@ public interface YgfDljExMapper {
 	 * @return
 	 */
 	List<YgfCity> getAllCity();
+	/**
+	 * -长短链表格
+	 * Description:  
+	 * @author jiangchao1  
+	 * @date 2018年11月2日  
+	 * @version 1.0
+	 */
+	List<YgfLongShortLinkEx> getAllLink(SearchData searchData);
 }

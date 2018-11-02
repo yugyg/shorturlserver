@@ -5,13 +5,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSONObject;
 import com.yugyg.entity.YgfDljSearchRecord;
 import com.yugyg.entity.YgfLongShortLink;
 import com.yugyg.entity.YgfProvince;
@@ -25,12 +22,9 @@ import com.yugyg.service.data.PublicResults;
 import com.yugyg.service.data.SearchData;
 import com.yugyg.service.data.SevenDaysData;
 import com.yugyg.service.data.TopThree;
-import com.yugyg.util.Const;
-import com.yugyg.util.HttpUtil;
+import com.yugyg.service.data.YgfLongShortLinkEx;
 import com.yugyg.util.TranslateLink;
 import com.yugyg.util.Util;
-
-import sun.util.logging.resources.logging;
 
 /**
  * @author jiangchao1
@@ -45,7 +39,7 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 	private YgfDljExMapper ygfDljExMapper;
 	@Transactional
 	@Override
-	public YgfLongShortLink insertShortLink(String longUrl) {
+	public YgfLongShortLink insertShortLink(String longUrl,String desc) {
 		YgfLongShortLink s_l_one = ygfDljExMapper.selectByLongLink(longUrl);
 		if(s_l_one!=null) {
 			return s_l_one;
@@ -63,6 +57,9 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 				}
 			} else {
 				ygfLongShortLink.setShortlink(shortLink);
+			}
+			if(!Util.isEmpty(desc)) {
+				ygfLongShortLink.setDesc(desc);
 			}
 			ygfLongShortLink.setTime(new Date());
 			ygfLongShortLinkMapper.insert(ygfLongShortLink);
@@ -160,5 +157,25 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 	@Override
 	public List<YgfProvince> getAllProvince() {
 		return ygfDljExMapper.getAllProvince();
+	}
+	@Override
+	public List<YgfLongShortLinkEx> getAllLink(String shortUrl, String longUrl, String desc, String start, String end) {
+		SearchData searchData = new SearchData();
+		if(!Util.isEmpty(shortUrl)) {
+			searchData.setBegin(shortUrl);
+		}
+		if(!Util.isEmpty(longUrl)) {
+			searchData.setBegin(longUrl);
+		}
+		if(!Util.isEmpty(desc)) {
+			searchData.setBegin(desc);
+		}
+		if(!Util.isEmpty(start)) {
+			searchData.setBegin(start);
+		}
+		if(!Util.isEmpty(end)) {
+			searchData.setBegin(end);
+		}
+		return ygfDljExMapper.getAllLink(searchData);
 	}
 }

@@ -299,4 +299,26 @@
 	<select id="getAllCity" resultType="com.yugyg.entity.YgfCity">
 		SELECT * FROM ygf_city;
 	</select>
+	<!-- 长短链表格 -->
+	<select id="getAllLink" parameterType="com.yugyg.service.data.SearchData" resultType="com.yugyg.service.data.YgfLongShortLinkEx">
+		SELECT *,
+		(SELECT COUNT(1) FROM ygf_dlj_search_record r WHERE ls.longLink LIKE CONCAT(r.searchLong,"%")) switchTimes
+		FROM ygf_long_short_link ls
+		WHERE TRUE
+		<if test="desc != '' and desc != null ">
+			AND ls.desc LIKE CONCAT("%",#{desc},"%")
+		</if>
+		<if test="longUrl != '' and longUrl != null ">
+			AND ls.longLink = #{longUrl}
+		</if>
+		<if test="shortUrl != '' and shortUrl != null ">
+			AND ls.shortLink = #{shortUrl}
+		</if>
+		<if test="begin != '' and begin != null ">
+			AND ls.time >= CAST(#{begin} AS datetime)
+		</if>
+		<if test="end != '' and end != null ">
+			AND CAST(#{end} AS datetime) >= ls.time 
+		</if>
+	</select>
 </mapper>

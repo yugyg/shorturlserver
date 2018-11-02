@@ -43,6 +43,7 @@ import com.yugyg.entity.YgfLongShortLink;
 import com.yugyg.entity.YgfProvince;
 import com.yugyg.service.ShortUrlService;
 import com.yugyg.service.data.ResultEntity;
+import com.yugyg.service.data.YgfLongShortLinkEx;
 import com.yugyg.util.Const;
 import com.yugyg.util.Util;
 
@@ -126,7 +127,7 @@ public class ShortUrlController {
 	 */
 	@PostMapping("/saveSU")
 	@ResponseBody
-	public ResultEntity longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest) {
+	public ResultEntity longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest,@RequestParam(required = false) String desc) {
 		ResultEntity result = new ResultEntity();
 		Map<String, String> map = new HashMap<String,String>();
 		if (longUrl==""||longUrl==null) {
@@ -134,7 +135,7 @@ public class ShortUrlController {
 			result.setDesc("参数错误");
 			return result;
 		}else {
-			YgfLongShortLink ygfLongShortLink = shortUrlService.insertShortLink(longUrl);
+			YgfLongShortLink ygfLongShortLink = shortUrlService.insertShortLink(longUrl,desc);
 			result.setResult(Const.result_success);
 			map.put("shortUrl", httpRequest.getRequestURL().toString().replace(httpRequest.getServletPath(),"/")+ygfLongShortLink.getShortlink());
 			map.put("longUrl", longUrl);
@@ -182,5 +183,21 @@ public class ShortUrlController {
 	}
 	public static void main(String[] args) {
 		System.out.println(Util.dateFormat(new Date(),Const.date_formate_1));
+	}
+	/**
+	 * -长短链表格
+	 * Description:  
+	 * @author jiangchao1  
+	 * @date 2018年11月2日  
+	 * @version 1.0
+	 */
+	public List<YgfLongShortLinkEx> getAllLink(
+			@RequestParam(required = false) String shortUrl,
+			@RequestParam(required = false) String longUrl,
+			@RequestParam(required = false) String desc,
+			@RequestParam(required = false) String start,
+			@RequestParam(required = false) String end
+			) {
+		return shortUrlService.getAllLink(shortUrl,longUrl,desc,start,end);
 	}
 }

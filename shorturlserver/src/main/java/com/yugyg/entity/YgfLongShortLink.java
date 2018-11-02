@@ -9,6 +9,8 @@ public class YgfLongShortLink {
 
     private Date time;
 
+    private String desc;
+
     private String longlink;
 
     public Long getId() {
@@ -33,6 +35,14 @@ public class YgfLongShortLink {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc == null ? null : desc.trim();
     }
 
     public String getLonglink() {

@@ -10,6 +10,7 @@ import com.yugyg.service.data.PieData;
 import com.yugyg.service.data.PublicResults;
 import com.yugyg.service.data.SearchData;
 import com.yugyg.service.data.TopThree;
+import com.yugyg.service.data.YgfLongShortLinkEx;
 
 /**
  * @author jiangchao1
@@ -18,9 +19,10 @@ public interface ShortUrlService {
 	/**
 	 * 压缩保存长连接
 	 * @param longUrl
+	 * @param desc 
 	 * @return
 	 */
-	YgfLongShortLink insertShortLink(String longUrl);
+	YgfLongShortLink insertShortLink(String longUrl, String desc);
 	/**
 	 * 记录查询信息
 	 * 返回长连接
@@ -116,4 +118,12 @@ public interface ShortUrlService {
 	 * @return
 	 */
 	List<YgfProvince> getAllProvince();
+	/**
+	 * -查询长短链表格
+	 * Description:  
+	 * @author jiangchao1  
+	 * @date 2018年11月2日  
+	 * @version 1.0
+	 */
+	List<YgfLongShortLinkEx> getAllLink(String shortUrl, String longUrl, String desc, String start, String end);
 }
