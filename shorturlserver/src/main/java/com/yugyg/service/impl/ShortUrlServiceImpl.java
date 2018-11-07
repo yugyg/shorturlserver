@@ -1,7 +1,9 @@
 package com.yugyg.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,10 +21,12 @@ import com.yugyg.service.ShortUrlService;
 import com.yugyg.service.data.IPData;
 import com.yugyg.service.data.PieData;
 import com.yugyg.service.data.PublicResults;
+import com.yugyg.service.data.ResultEntity;
 import com.yugyg.service.data.SearchData;
 import com.yugyg.service.data.SevenDaysData;
 import com.yugyg.service.data.TopThree;
 import com.yugyg.service.data.YgfLongShortLinkEx;
+import com.yugyg.util.Const;
 import com.yugyg.util.TranslateLink;
 import com.yugyg.util.Util;
 
@@ -159,23 +163,46 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 		return ygfDljExMapper.getAllProvince();
 	}
 	@Override
-	public List<YgfLongShortLinkEx> getAllLink(String shortUrl, String longUrl, String desc, String start, String end) {
+	public ResultEntity getAllLink(String shortUrl, String longUrl, String desc, String start, String end,String page){
 		SearchData searchData = new SearchData();
+		ResultEntity result = new ResultEntity();
+		Map<String, Object> map = new HashMap<>();
 		if(!Util.isEmpty(shortUrl)) {
-			searchData.setBegin(shortUrl);
+			searchData.setShortUrl(shortUrl);
 		}
 		if(!Util.isEmpty(longUrl)) {
-			searchData.setBegin(longUrl);
+			searchData.setLongUrl(longUrl);
 		}
 		if(!Util.isEmpty(desc)) {
-			searchData.setBegin(desc);
+			searchData.setDesc(desc);
 		}
 		if(!Util.isEmpty(start)) {
 			searchData.setBegin(start);
 		}
 		if(!Util.isEmpty(end)) {
-			searchData.setBegin(end);
+			searchData.setEnd(end);
 		}
-		return ygfDljExMapper.getAllLink(searchData);
+		Integer count = ygfDljExMapper.selectAllShortLongLink(searchData);
+		int totalPage = count%10==0?count/10:(count/10)+1;
+		if (!Util.isEmpty(page) && totalPage > 0) {
+			if (Integer.valueOf(page)<=0) {
+				searchData.setStartIndex(0);
+			}else if(Integer.valueOf(page)>totalPage){
+				searchData.setStartIndex((totalPage-1)*10);
+			}else {
+				searchData.setStartIndex((Integer.parseInt(page)-1)*10);
+			}
+		}else {
+			searchData.setStartIndex(0);
+		}
+		map.put("totalPage", totalPage);
+		List<YgfLongShortLinkEx> list = ygfDljExMapper.getAllLink(searchData);
+		if (list.size() > 0) {
+			map.put("data", list);
+			result.setData(map);
+		}
+		result.setErrorCode("0");
+		result.setResult(Const.result_success);
+		return result;
 	}
 }

@@ -320,5 +320,26 @@
 		<if test="end != '' and end != null ">
 			AND CAST(#{end} AS datetime) >= ls.time 
 		</if>
+		Limit #{startIndex},10;
 	</select>
+	<select id="selectAllShortLongLink" parameterType="com.yugyg.service.data.SearchData" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM ygf_long_short_link ls
+		WHERE TRUE
+		<if test="desc != '' and desc != null ">
+			AND ls.desc LIKE CONCAT("%",#{desc},"%")
+		</if>
+		<if test="longUrl != '' and longUrl != null ">
+			AND ls.longLink = #{longUrl}
+		</if>
+		<if test="shortUrl != '' and shortUrl != null ">
+			AND ls.shortLink = #{shortUrl}
+		</if>
+		<if test="begin != '' and begin != null ">
+			AND ls.time >= CAST(#{begin} AS datetime)
+		</if>
+		<if test="end != '' and end != null ">
+			AND CAST(#{end} AS datetime) >= ls.time 
+		</if>
+	</select>
+	
 </mapper>

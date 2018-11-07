@@ -28,6 +28,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,13 +45,15 @@ import com.yugyg.entity.YgfLongShortLink;
 import com.yugyg.entity.YgfProvince;
 import com.yugyg.service.ShortUrlService;
 import com.yugyg.service.data.ResultEntity;
-import com.yugyg.service.data.YgfLongShortLinkEx;
 import com.yugyg.util.Const;
 import com.yugyg.util.Util;
 
 @Controller
 @CrossOrigin
 public class ShortUrlController {
+	
+	private static final Logger log = LoggerFactory.getLogger(ShortUrlController.class);
+
 	/***
 	 * 请求重定向
 	 * @param shortUrl
@@ -71,7 +75,7 @@ public class ShortUrlController {
 	@RequestMapping("/{shortUrl}")
 	public void shortToLongUrl(@PathVariable("shortUrl") String shortUrl, HttpServletRequest httpRequest,
 			WebRequest webRequest,HttpServletResponse httpResponse) throws ServletException, IOException {
-
+		log.info("shortUrl={}",shortUrl);
 		String remoteAddr = Util.getRemoteHost(httpRequest);//ip
 		String userAgent = webRequest.getHeader(HttpHeaders.USER_AGENT);//请求头
 		String referer = webRequest.getHeader(HttpHeaders.REFERER);
@@ -128,6 +132,7 @@ public class ShortUrlController {
 	@PostMapping("/saveSU")
 	@ResponseBody
 	public ResultEntity longToShortUrl(@RequestParam(required = true) String longUrl, HttpServletRequest httpRequest,@RequestParam(required = false) String desc) {
+		log.info("longUrl={},desc={}",longUrl,desc);
 		ResultEntity result = new ResultEntity();
 		Map<String, String> map = new HashMap<String,String>();
 		if (longUrl==""||longUrl==null) {
@@ -152,6 +157,7 @@ public class ShortUrlController {
 	@GetMapping("/getLongUrl")
 	@ResponseBody
 	public ResultEntity getLongUrl(@RequestParam(required = true) String shortUrl) {
+		log.info("shortUrl={}",shortUrl);
 		ResultEntity result = new ResultEntity();
 		if (shortUrl==""||shortUrl==null) {
 			result.setResult(Const.result_fail);
@@ -181,9 +187,6 @@ public class ShortUrlController {
 	public String index() {
 		return "redirect:/html/saveUrl.html";
 	}
-	public static void main(String[] args) {
-		System.out.println(Util.dateFormat(new Date(),Const.date_formate_1));
-	}
 	/**
 	 * -长短链表格
 	 * Description:  
@@ -191,13 +194,17 @@ public class ShortUrlController {
 	 * @date 2018年11月2日  
 	 * @version 1.0
 	 */
-	public List<YgfLongShortLinkEx> getAllLink(
+	@GetMapping("/getAllLink")
+	@ResponseBody
+	public ResultEntity getAllLink(
 			@RequestParam(required = false) String shortUrl,
 			@RequestParam(required = false) String longUrl,
 			@RequestParam(required = false) String desc,
 			@RequestParam(required = false) String start,
-			@RequestParam(required = false) String end
+			@RequestParam(required = false) String end,
+			@RequestParam(required = false) String currentPage
 			) {
-		return shortUrlService.getAllLink(shortUrl,longUrl,desc,start,end);
+		log.info("shortUrl={},longUrl={},desc={},start={},end={},currentPage={}",shortUrl,longUrl,desc,start,end,currentPage);
+		return shortUrlService.getAllLink(shortUrl,longUrl,desc,start,end,currentPage);
 	}
 }

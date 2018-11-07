@@ -128,4 +128,12 @@ public interface YgfDljExMapper {
 	 * @version 1.0
 	 */
 	List<YgfLongShortLinkEx> getAllLink(SearchData searchData);
+	/**
+	 * -长短链数量
+	 * Description:  
+	 * @author jiangchao1  
+	 * @date 2018年11月2日  
+	 * @version 1.0
+	 */
+	Integer selectAllShortLongLink(SearchData searchData);
 }

@@ -83,6 +83,8 @@ public class DataController {
 	WebRequest webRequest,HttpServletResponse httpResponse) throws ServletException, IOException {
 		ResultEntity result = new ResultEntity();
 		Map<String, Object> map = new HashMap<>();
+		logger.info("startTime={},endTime={},shortUrl={},witch={},browser={},equipment={},country={},internet={},status={},privonce={},page={}"
+				,startTime,endTime,shortUrl,witch,browser,equipment,country,internet,status,privonce,page);
 		if (!Util.isEmpty(shortUrl)) {
 			result.setResult(Const.result_success);
 			SearchData searchData = new SearchData();
@@ -161,18 +163,21 @@ public class DataController {
 				break;
 			case "H"://访问记录明细
 				Integer count = shortUrlService.selectAllRecordCount(searchData);
-				if (!Util.isEmpty(page)) {
+				int totalPage = count%50==0?count/50:(count/50)+1;
+				if (!Util.isEmpty(page) && totalPage > 0) {
 					if (Integer.valueOf(page)<=0) {
 						searchData.setStartIndex(0);
-					}else if(Integer.valueOf(page)>count){
-						searchData.setStartIndex((count-1)*50);
+					}else if(Integer.valueOf(page)>totalPage){
+						searchData.setStartIndex((totalPage-1)*50);
 					}else {
 						searchData.setStartIndex((Integer.parseInt(page)-1)*50);
 					}
+				}else {
+					searchData.setStartIndex(0);
 				}
 				List<YgfDljSearchRecord> allRecord = shortUrlService.selectAllRecord(searchData);
 				map.put("allRecord", allRecord);
-				map.put("totalPage", count%50==0?count/50:(count/50)+1);
+				map.put("totalPage", totalPage);
 				break;
 			case "I"://访问记录明细
 				List<IPData> ips = shortUrlService.selectIps(searchData);

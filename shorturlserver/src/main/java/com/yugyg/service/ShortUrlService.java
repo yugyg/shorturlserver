@@ -8,9 +8,9 @@ import com.yugyg.entity.YgfProvince;
 import com.yugyg.service.data.IPData;
 import com.yugyg.service.data.PieData;
 import com.yugyg.service.data.PublicResults;
+import com.yugyg.service.data.ResultEntity;
 import com.yugyg.service.data.SearchData;
 import com.yugyg.service.data.TopThree;
-import com.yugyg.service.data.YgfLongShortLinkEx;
 
 /**
  * @author jiangchao1
@@ -124,6 +124,7 @@ public interface ShortUrlService {
 	 * @author jiangchao1  
 	 * @date 2018年11月2日  
 	 * @version 1.0
+	 * @param currentPage 
 	 */
-	List<YgfLongShortLinkEx> getAllLink(String shortUrl, String longUrl, String desc, String start, String end);
+	ResultEntity getAllLink(String shortUrl, String longUrl, String desc, String start, String end, String page);
 }

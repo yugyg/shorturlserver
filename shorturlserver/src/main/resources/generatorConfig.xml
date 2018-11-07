@@ -14,10 +14,11 @@
 	    <!-- 连接MySql驱动 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://101.132.131.185/test" userId="root" password="Yugyg@2017">
 		</jdbcConnection>
+		<!-- 这个元素的配置用来指定JDBC类型和Java类型如何转换 -->
 		<javaTypeResolver>
 			<property name="forceBigDecimals" value="false"/>
 		</javaTypeResolver>
-		
+		<!-- 该元素用来控制生成的实体类，根据<context>中配置的defaultModelType，一个表可能会对应生成多个不同的实体类。一个表对应多个类实际上并不方便，所以前面也推荐使用flat，这种情况下一个表对应一个实体类。 -->
 		<javaModelGenerator targetPackage="com.yugyg.entity" targetProject="./src/main/java">
 			<property name="enableSubPackages" value="true"/>
 			<property name="trimStrings" value="true"/>
