@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>短链列表</title>
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <link rel="stylesheet" href="/css/shortUrlList.css">
+</head>
+
+<body >
+<header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" rel="home" title="愚公坊">
+                        <!-- <img style="max-width:100px; margin-top: -5px;" src="//cdn.link-hub.cn/0x3.me/static/image/logo-cartoon-3.png"> -->
+                        愚公坊
+                    </a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li id="nav-index">
+                            <a href="/html/saveUrl.html">首页</a>
+                        </li>
+                        <li id="nav-demo">
+                            <a href="/html/shortUrl.html" style="font-weight: bold;">统计报表</a>
+                        </li>
+                         <li>
+                            <a href="/html/shortUrlList.html" style="font-weight: bold;">短链列表</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+    <div class="wrap">
+        <h1 class="header_title">短链列表</h1>
+    </div>
+    <div class="vote_box" id="urlBody">
+        <!--box-头部-->
+        <div class="pt_header row">
+            <div class="col-md-11">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label">长链:</label>
+                            <input type="text" class="longUrl" v-model="longUrl">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">短链:</label>
+                            <input type="text" class="shortUrl" v-model="shortUrl">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="form-label">短链描述:</label>
+                            <input type="text" class="shortDesc" v-model="desc">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group searchTime">
+                            <label class="form-label">转换时间：</label>
+                            <div class="input-group input-group-sm date_choose">
+                                <date-picker type="datetime" v-model="start" placeholder="请选择开始时间" :options="startTimeOption" @on-change="onStartTimeChange"></date-picker>
+                            </div>
+                            <label class="form-label">到</label>
+                            <div class="input-group input-group-sm date_choose">
+                                <date-picker type="datetime" v-model="end" placeholder="请选择结束时间" :options="endTimeOption" @on-change="onEndTimeChange"></date-picker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-primary search_btn" @click="getList()">搜索</button>
+            </div>
+        </div>
+        <!--table内容区-->
+        <div class="vote_body">
+            <table  class="table table-striped table-hover">
+                <thead>
+                    <th>长链</th>
+                    <th>短链</th>
+                    <th>短链描述</th>
+                    <th>转换时间</th>
+                    <th>访问次数</th>
+                </thead>
+                <tbody class="urlListBody">
+                    <template  v-for="item in items">
+                    <tr class="urlMsg">
+                        <td class="long">
+                            <p class="ItemLongUrl">{{ item.longlink }}</p>
+                        </td>
+                        <td class="short">
+                            <p>{{ item.shortlink }}</p>
+                        </td>
+                        <td class="shortDesc">
+                            <p>{{ item.desc }}</p>
+                        </td>
+                        <td class="time">
+                            <p>{{ timeChange(item.time) }}</p>
+                        </td>
+                        <td class="blowTimes">
+                            <p>{{ item.switchTimes }}</p>
+                        </td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+        </div>
+        <!--分页-->
+        <div class="page-bar" v-if="isShowPage">
+            <ul>
+                <li v-if="currentPage>1"><a v-on:click="currentPage--,pageClick()">上一页</a></li>
+                <li v-if="currentPage==1"><a class="banclick">上一页</a></li>
+                <li v-for="index in indexs"  v-bind:class="{ 'active': currentPage == index}">
+                    <a v-on:click="btnClick(index)">{{ index }}</a>
+                </li>
+                <li v-if="currentPage!=totalPage"><a v-on:click="currentPage++,pageClick()">下一页</a></li>
+                <li v-if="currentPage == totalPage"><a class="banclick">下一页</a></li>
+                <li><a>共<i>{{totalPage}}</i>页</a></li>
+            </ul>
+        </div>
+          <!--无活动提示-->
+        <div class="table-null noneVote" v-if="noneShort">
+            暂无数据
+        </div>
+    </div>
+    </div>
+  
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+     <script src="//jquery-1.11.1.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-paginator.js"></script>
+    <script src="/js/moment.min.js"></script>
+    <script src="https://unpkg.com/iview/dist/iview.min.js"></script>
+    <script src="/js/shortUrlList.js"></script>
+</body>
+
+
+</html>
