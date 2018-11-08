@@ -27,8 +27,14 @@
 .header_title{
     margin: 15px 0;
 }
-.longUrl{
-    width: 80%;
+.pt_header{
+	margin-bottom:10px;
+}
+.longUrl,.shortUrl{
+    width: 94%;
+}
+input.shortDesc{
+	width:90%;
 }
 .longUrl,.shortUrl,input.shortDesc{
     height: 32px;
@@ -46,7 +52,9 @@
     width: 164px;
 }
 
-
+.vote_body{
+	border:1px solid #ddd;
+}
 .table{
     margin-bottom: 0;
 }
@@ -69,14 +77,18 @@
 }
 
 .ItemLongUrl{
-    word-break: break-all
+    width: 440px;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .long{
     width: 40%;
 }
 
 .page-bar{
-    margin:40px;
+    margin:40px 0;
 }
 .page-bar ul{
     display: flex;

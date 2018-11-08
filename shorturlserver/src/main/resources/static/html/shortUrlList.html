@@ -47,30 +47,31 @@
             <!-- /.container-fluid -->
         </nav>
     </header>
+    <div class="container">
     <div class="wrap">
         <h1 class="header_title">短链列表</h1>
     </div>
     <div class="vote_box" id="urlBody">
         <!--box-头部-->
         <div class="pt_header row">
-            <div class="col-md-11">
+            <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-label">长链:</label>
                             <input type="text" class="longUrl" v-model="longUrl">
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="form-label">短链:</label>
-                            <input type="text" class="shortUrl" v-model="shortUrl">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
+                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-label">短链描述:</label>
                             <input type="text" class="shortDesc" v-model="desc">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">短链:</label>
+                            <input type="text" class="shortUrl" v-model="shortUrl">
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -85,11 +86,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-1">
+		                <button type="button" class="btn btn-primary search_btn" @click="getList()">搜索</button>
+		            </div>
                 </div>
             </div>
-            <div class="col-md-1">
-                <button type="button" class="btn btn-primary search_btn" @click="getList()">搜索</button>
-            </div>
+           
         </div>
         <!--table内容区-->
         <div class="vote_body">
@@ -105,7 +107,7 @@
                     <template  v-for="item in items">
                     <tr class="urlMsg">
                         <td class="long">
-                            <p class="ItemLongUrl">{{ item.longlink }}</p>
+                            <a :href="item.longlink" :title="item.longlink" target="_blank" class="ItemLongUrl">{{ item.longlink }}</a>
                         </td>
                         <td class="short">
                             <p>{{ item.shortlink }}</p>
@@ -141,6 +143,7 @@
         <div class="table-null noneVote" v-if="noneShort">
             暂无数据
         </div>
+    </div>
     </div>
     </div>
   

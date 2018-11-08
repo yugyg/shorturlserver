@@ -320,6 +320,7 @@
 		<if test="end != '' and end != null ">
 			AND CAST(#{end} AS datetime) >= ls.time 
 		</if>
+		ORDER BY ls.time DESC
 		Limit #{startIndex},10;
 	</select>
 	<select id="selectAllShortLongLink" parameterType="com.yugyg.service.data.SearchData" resultType="java.lang.Integer">
