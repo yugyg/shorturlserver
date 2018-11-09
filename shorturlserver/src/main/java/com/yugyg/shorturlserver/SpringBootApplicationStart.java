@@ -22,7 +22,7 @@ public class SpringBootApplicationStart implements CommandLineRunner
 		  long begin = System.currentTimeMillis();
 		  ApplicationContext ctx = SpringApplication.run(SpringBootApplicationStart.class, args);
 		  long end = System.currentTimeMillis();
-		  logger.info("============程序启动成功!      耗时间:{ }毫秒==============",end-begin);
+		  logger.info("============程序启动成功!      耗时间:{}毫秒==============",end-begin);
 	}
 	@Override
 	public void run(String... args) throws  Exception {

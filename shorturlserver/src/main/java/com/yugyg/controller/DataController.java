@@ -45,6 +45,7 @@ public class DataController {
 	private ShortUrlService shortUrlService;
 	@Resource
 	private YgfDljSearchRecordMapper ygfDljSearchRecordMapper;
+	
 	private static Logger logger = LoggerFactory.getLogger(DataController.class);
 	/**
 	 * 短链数据统计
