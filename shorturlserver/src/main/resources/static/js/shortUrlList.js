@@ -67,6 +67,10 @@ var vm=new Vue({
         timeChange(time){
             return this.timestampToTime(time); 
         },
+        //时间转换(date=>timeStamp=>dateString)
+        timeChangeOld(time){
+        	return this.timestampToTime(new Date(time).getTime()/1000); 
+        },
         // 点击分页
         changePage(val){
             this.currentPage = val;
