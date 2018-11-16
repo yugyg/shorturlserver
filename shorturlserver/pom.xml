@@ -25,7 +25,7 @@
 		<okhttp.version>3.11.0</okhttp.version>
 		<org.mybatis.generator.version>1.3.5</org.mybatis.generator.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+		<revision>2.1.0</revision>
 	</properties>
 
 	<dependencies>
@@ -67,6 +67,16 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>${mybatis-spring-boot-starter.version}</version>
 		</dependency>
+		 <!-- springboot admin client -->
+	  	<dependency>
+		    <groupId>de.codecentric</groupId>
+		    <artifactId>spring-boot-admin-starter-client</artifactId>
+		    <version>${revision}</version>
+	  	</dependency>
+	  	<!-- <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency> -->
 	</dependencies>
 	
 	<build>
