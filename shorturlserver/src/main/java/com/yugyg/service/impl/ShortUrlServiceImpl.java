@@ -63,7 +63,7 @@ public class ShortUrlServiceImpl implements ShortUrlService{
 				ygfLongShortLink.setShortlink(shortLink);
 			}
 			if(!Util.isEmpty(desc)) {
-				ygfLongShortLink.setDesc(desc);
+				ygfLongShortLink.setUrldesc(desc);
 			}
 			ygfLongShortLink.setTime(new Date());
 			ygfLongShortLinkMapper.insert(ygfLongShortLink);
