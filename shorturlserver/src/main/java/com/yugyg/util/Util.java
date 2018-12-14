@@ -41,6 +41,8 @@ public class Util {
 			result = "MicroMessenger";
 		}else if(user_agent.indexOf("Chrome") != -1) {//    "Chrome":"谷歌浏览器",
 			result = "Chrome";
+		}else if(user_agent.indexOf("Mozilla") != -1){//Mozilla 火狐
+			result = "Mozilla";
 		}else {
 			result = "unknown";
 		}
